@@ -1,6 +1,10 @@
 package com.checkersgame.gui;
 
 import com.checkersgame.Player;
+
+import java.io.File;
+import java.io.PrintWriter;
+
 import com.checkersgame.Move;
 
 /**
@@ -93,7 +97,13 @@ public class BoardUtility {
 	public static Move TranslateMove(Move m) throws Exception {
 		return new Move(m.start-1,m.end-1);
 	}
-	
+	/**
+	 * Checks to see if a regular piece can make a move, regardless 
+	 * of there being a piece in the end position
+	 * @param m
+	 * @param p
+	 * @return
+	 */
 	public static boolean isValidForwardMove(Move m, Player p) {
 		boolean isInAvailableMoves = false;
 		boolean isCorrectDirection = false;
@@ -124,5 +134,45 @@ public class BoardUtility {
 		//end is in the set of adjacent spaces
 		return isInAvailableMoves && isCorrectDirection;
 	}
+	public static boolean isValidSingleJump(Move m) {
+		boolean isJump = false;
+		for(int i = 0 ; i < singleJumps[m.start].length ; i++ ) {//look through jumps
+			if(singleJumps[m.start][i] == m.end) {
+				isJump = true;
+			}
+		}
+		return isJump;
+	}
+	
+	/**
+	 * determines if the int array at index Move.start contains the int Move.end
+	 * @param m
+	 * @return
+	 */
+	public static boolean isValidMove(Move m) {
+		boolean isMove = false;
+		for(int i = 0 ; i < singleMoves[m.start].length ; i++ ) {//look through jumps
+			if(singleMoves[m.start][i] == m.end) {
+				isMove = true;
+			}
+		}
+		return isMove;
+	}
+	
+	/**
+	 * Determines if the jumps array at index Move.start contains int Move.end
+	 * @param m
+	 * @return
+	 */
+	public static boolean isValidJump(Move m) {
+		boolean isJump = false;
+		for(int i = 0 ; i < singleJumps[m.start].length ; i++ ) {//look through jumps
+			if(singleJumps[m.start][i] == m.end) {
+				isJump = true;
+			}
+		}
+		return isJump;
+	}
+
 }
 
