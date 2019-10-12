@@ -1,8 +1,5 @@
 package com.agent.imp;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.agent.Action;
 import com.agent.Agent;
 import com.agent.State;
@@ -11,11 +8,8 @@ import com.checkersgame.Move;
 import com.checkersgame.Piece;
 import com.checkersgame.Player;
 import com.checkersgame.gui.CheckerBoard;
-/**
- * TODO, this really does nothing at the moment
- */
-public class TestAgent implements Agent {
-	
+
+public class Human implements Agent {
 	public Player p;
 	public CheckerBoard board;
 	public CheckersGame game;
@@ -28,23 +22,13 @@ public class TestAgent implements Agent {
 
 	@Override
 	public void GetMove() {
-		Move[] moves = game.AvailableMoves(p);
-		int index = (int)(Math.random()*(moves.length));
-		board.playableSpaces[moves[index].start].AgentsMove(p);
-		board.playableSpaces[moves[index].end].AgentsMove(p);
-	}
-	public List<Move> FindAvailableMoves() {
-		List<Move> moves = null;
-		try {
-			moves = new ArrayList<Move>();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return (List<Move>)moves;
+		//allow the gui to handle stuff
 	}
 
 	@Override
 	public Action Percieve(State s) {
+		//allow the gui to perceive or rather, the other player
 		return null;
 	}
+
 }
