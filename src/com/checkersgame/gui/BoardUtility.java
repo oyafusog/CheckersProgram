@@ -97,6 +97,7 @@ public class BoardUtility {
 	public static Move TranslateMove(Move m) throws Exception {
 		return new Move(m.start-1,m.end-1);
 	}
+	
 	/**
 	 * Checks to see if a regular piece can make a move, regardless 
 	 * of there being a piece in the end position
@@ -134,16 +135,29 @@ public class BoardUtility {
 		//end is in the set of adjacent spaces
 		return isInAvailableMoves && isCorrectDirection;
 	}
-	public static boolean isValidSingleJump(Move m) {
+	/**
+	 * Determines if a single jump is valid by looking at the board
+	 * @param m
+	 * @return
+	 */
+	public static boolean isValidJump(Move m) {
+//		boolean isJump = false;
+//		for(int i = 0 ; i < singleJumps[m.start].length ; i++ ) {//look through jumps
+//			if(singleJumps[m.start][i] == m.end) {
+//				isJump = true;
+//			}
+//		}
+		return isValidJump(m.start,m.end);
+	}
+	public static boolean isValidJump(int start, int end) {
 		boolean isJump = false;
-		for(int i = 0 ; i < singleJumps[m.start].length ; i++ ) {//look through jumps
-			if(singleJumps[m.start][i] == m.end) {
+		for(int i = 0 ; i < singleJumps[start].length ; i++ ) {//look through jumps
+			if(singleJumps[start][i] == end) {
 				isJump = true;
 			}
 		}
 		return isJump;
 	}
-	
 	/**
 	 * determines if the int array at index Move.start contains the int Move.end
 	 * @param m
@@ -158,21 +172,21 @@ public class BoardUtility {
 		}
 		return isMove;
 	}
-	
-	/**
-	 * Determines if the jumps array at index Move.start contains int Move.end
-	 * @param m
-	 * @return
-	 */
-	public static boolean isValidJump(Move m) {
-		boolean isJump = false;
-		for(int i = 0 ; i < singleJumps[m.start].length ; i++ ) {//look through jumps
-			if(singleJumps[m.start][i] == m.end) {
-				isJump = true;
-			}
-		}
-		return isJump;
-	}
+//duplicate
+//	/**
+//	 * Determines if the jumps array at index Move.start contains int Move.end
+//	 * @param m
+//	 * @return
+//	 */
+//	public static boolean isValidJump(Move m) {
+//		boolean isJump = false;
+//		for(int i = 0 ; i < singleJumps[m.start].length ; i++ ) {//look through jumps
+//			if(singleJumps[m.start][i] == m.end) {
+//				isJump = true;
+//			}
+//		}
+//		return isJump;
+//	}
 
 }
 

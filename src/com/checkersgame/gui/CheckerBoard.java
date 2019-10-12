@@ -3,6 +3,7 @@ package com.checkersgame.gui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import com.checkersgame.Player;
 import com.checkersgame.Piece;
 
 /**
- * The JFrame that represents the checkerboard
+ * The JFrame that represents the checker board
  * see the Board class for valid moves and piece removal/king
  */
 public class CheckerBoard extends JFrame {
@@ -37,15 +38,15 @@ public class CheckerBoard extends JFrame {
 	
 	public CheckerBoard(CheckersGame b) {
 		super();
-		game =b;
+		game = b;
 		//init variables
 		start =-1;
 		end=-1;
 		holdpiece = false;
-		
-		
+
 		playableSpaces = new PlayableSpace[32];		//the array of panels representing
 													//the playable spaces
+		//heldpieceoriginalspace=nullspace;hmmm
 		setSize(600, 600);
 		
 		int row = 8; 
@@ -74,6 +75,12 @@ public class CheckerBoard extends JFrame {
 	    return compList;
 	}
 	
+
+	public void ResetHolding() {
+		holdpiece=false;
+		heldpieceoriginalspace=nullspace;
+	}
+	
 	@SuppressWarnings("unused")
 	public void PickUpPiece(int spaceid) {
 		if(false) {//can this player pick up the piece
@@ -86,7 +93,7 @@ public class CheckerBoard extends JFrame {
 	
 	@SuppressWarnings("unused")
 	public void PlacePiece(int spaceid) {
-		if(false) {//is this a valid move by the player
+		if(spaceid<0) {
 			return;//TODO
 		} else {//else go ahead
 			holdpiece=false;
@@ -132,12 +139,25 @@ public class CheckerBoard extends JFrame {
 			playableSpaces[i] = tmp;
 		}
 	}
+	/*
+	@Override
+	public void update(Graphics g) {
+		super.update(g);
+		System.out.println("dddddd");
+	}*/
 	
-	//test the board
-	public static void main(String[] args) {
-		System.out.println("Starting");
-		@SuppressWarnings("unused")
-		CheckerBoard window = new CheckerBoard(new CheckersGame());//just for now
-		System.out.println("End");
+	public void ForceUpdateGraphics() {
+		for(int p = 0 ; p < playableSpaces.length; p++ ) {
+			
+		}
 	}
+	//test the board
+//	public static void main(String[] args) {
+//		System.out.println("Starting");
+//		@SuppressWarnings("unused")
+//		CheckersGame g = new CheckersGame();
+//		g.playersTurn=Player.BLACK;
+//		CheckerBoard window = new CheckerBoard(g);//just for now
+//		System.out.println("End");
+//	}
 }
