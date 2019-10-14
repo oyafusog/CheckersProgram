@@ -3,7 +3,6 @@ package com.checkersgame.gui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Graphics;
 import java.awt.GridLayout;
 
 import java.util.ArrayList;
@@ -24,24 +23,17 @@ public class CheckerBoard extends JFrame {
 	private static final long serialVersionUID = -6737384592246616039L;
 	
 	public CheckersGame game;
+	
 	public PlayableSpace[] playableSpaces;
 	private PlayableSpace nullspace = new PlayableSpace(-1,this);
 	//stuff to move pieces manually
 	public boolean holdpiece;
-	public Player inquestion;
-	@SuppressWarnings("unused")
-	private int start,end;
-	@SuppressWarnings("unused")
-	private final Piece nonplayable=Piece.EMPTY;
 	
 	public PlayableSpace heldpieceoriginalspace;
 	
 	public CheckerBoard(CheckersGame b) {
 		super();
 		game = b;
-		//init variables
-		start =-1;
-		end=-1;
 		holdpiece = false;
 
 		playableSpaces = new PlayableSpace[32];		//the array of panels representing
@@ -52,8 +44,7 @@ public class CheckerBoard extends JFrame {
 		int row = 8; 
 		int col = 8; 
 		this.setLayout(new GridLayout(row, col));
-		
-		
+
 		DisplayBoard();								//setup the panels to be a checker board
 		
 		setResizable(false);						//JFrame stuff
@@ -81,20 +72,15 @@ public class CheckerBoard extends JFrame {
 		heldpieceoriginalspace=nullspace;
 	}
 	
-	@SuppressWarnings("unused")
-	public void PickUpPiece(int spaceid) {
-		if(false) {//can this player pick up the piece
-			return;//TODO
-		} else {//if so go ahead
-			holdpiece=true;
-			heldpieceoriginalspace=playableSpaces[spaceid];
-		}
-	}
 	
-	@SuppressWarnings("unused")
+	public void PickUpPiece(int spaceid) {
+		holdpiece=true;
+		heldpieceoriginalspace=playableSpaces[spaceid];
+	}
+
 	public void PlacePiece(int spaceid) {
-		if(spaceid<0) {
-			return;//TODO
+		if(spaceid<0) {//can't place outside of the board
+			return;
 		} else {//else go ahead
 			holdpiece=false;
 			heldpieceoriginalspace.setBackground(Color.GRAY);
@@ -139,25 +125,4 @@ public class CheckerBoard extends JFrame {
 			playableSpaces[i] = tmp;
 		}
 	}
-	/*
-	@Override
-	public void update(Graphics g) {
-		super.update(g);
-		System.out.println("dddddd");
-	}*/
-	
-	public void ForceUpdateGraphics() {
-		for(int p = 0 ; p < playableSpaces.length; p++ ) {
-			
-		}
-	}
-	//test the board
-//	public static void main(String[] args) {
-//		System.out.println("Starting");
-//		@SuppressWarnings("unused")
-//		CheckersGame g = new CheckersGame();
-//		g.playersTurn=Player.BLACK;
-//		CheckerBoard window = new CheckerBoard(g);//just for now
-//		System.out.println("End");
-//	}
 }

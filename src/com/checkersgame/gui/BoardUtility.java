@@ -2,9 +2,6 @@ package com.checkersgame.gui;
 
 import com.checkersgame.Player;
 
-import java.io.File;
-import java.io.PrintWriter;
-
 import com.checkersgame.Move;
 
 /**
@@ -141,14 +138,14 @@ public class BoardUtility {
 	 * @return
 	 */
 	public static boolean isValidJump(Move m) {
-//		boolean isJump = false;
-//		for(int i = 0 ; i < singleJumps[m.start].length ; i++ ) {//look through jumps
-//			if(singleJumps[m.start][i] == m.end) {
-//				isJump = true;
-//			}
-//		}
 		return isValidJump(m.start,m.end);
 	}
+	/**
+	 * Checks the array above
+	 * @param start start number
+	 * @param end end number
+	 * @return
+	 */
 	public static boolean isValidJump(int start, int end) {
 		boolean isJump = false;
 		for(int i = 0 ; i < singleJumps[start].length ; i++ ) {//look through jumps
@@ -158,6 +155,7 @@ public class BoardUtility {
 		}
 		return isJump;
 	}
+	
 	/**
 	 * determines if the int array at index Move.start contains the int Move.end
 	 * @param m
@@ -172,21 +170,5 @@ public class BoardUtility {
 		}
 		return isMove;
 	}
-//duplicate
-//	/**
-//	 * Determines if the jumps array at index Move.start contains int Move.end
-//	 * @param m
-//	 * @return
-//	 */
-//	public static boolean isValidJump(Move m) {
-//		boolean isJump = false;
-//		for(int i = 0 ; i < singleJumps[m.start].length ; i++ ) {//look through jumps
-//			if(singleJumps[m.start][i] == m.end) {
-//				isJump = true;
-//			}
-//		}
-//		return isJump;
-//	}
-
 }
 

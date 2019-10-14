@@ -1,8 +1,8 @@
 package com.checkersgame;
 
-import com.agent.Action;
 
-public class Move extends Action {
+
+public class Move{
 	public int start;
 	public int end;
 	public boolean isJump;

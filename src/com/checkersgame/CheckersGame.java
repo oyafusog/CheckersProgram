@@ -1,10 +1,7 @@
 package com.checkersgame;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import com.checkersgame.gui.BoardUtility;
-
 
 //The game of checkers
 public class CheckersGame {
@@ -76,6 +73,10 @@ public class CheckersGame {
 //	};
 	}
 	
+	/**
+	 * Utility to count pieces black has
+	 * @return
+	 */
 	public int NumberOfBlackPieces() {
 		int sum = 0;
 		for(Piece i : boardspot) {
@@ -85,7 +86,10 @@ public class CheckersGame {
 		}
 		return sum;
 	}
-	
+	/**
+	 * Utility to count pieces red has
+	 * @return
+	 */
 	public int NumberOfRedPieces() {
 		int sum = 0;
 		for(Piece i : boardspot) {
@@ -95,40 +99,27 @@ public class CheckersGame {
 		}
 		return sum;
 	}
-	
-	public Piece GetSpace(int p) {
-		return boardspot[p];
-	}
-	
-	public void ExecuteMove(Move m , Player p) {
-		//check if valid
-		//king nonking pieces
-		//remove pieces if needed
-	}
-	
-	
+
 	/**
-	 *  Moves are jumps or single space moves
-	 *  Main Function to call when checking if a move is legal
+	 * 
+	 * @param m the move
+	 * @param p the player taking the move
+	 * @return if the move is Valid
 	 */
 	public boolean isValidMove(Move m,Player p) {
 		if(m.start > 31 || m.start < 0|| m.end > 31|| m.end < 0) { //not a valid spot
 			return false;
-		//} else if( m.start == m.end ) { //cannot put a piece back where it was
-		//	return false;//this could happen...
 		} else if(!isPlayersPiece(m,p)) {//can't move other players pieces, or non-existent pieces
 			return false;
 		} else if(boardspot[m.end] != Piece.EMPTY) {//cannot put pieces on other pieces
 			return false;
-		} else if( ValidSingleMove(m,p)) {//this is ok?
+		} else if( ValidSingleMove(m,p)) {//single move is ok?
 			return true;
 		} else if( ValidJump(m,p) ) {//jump move ok?
 			return true;
 		} else { //the move is valid
 			return false;
 		}
-		
-		//return ValidMove(m.start,m.end);
 	}
 	
 	/**
@@ -242,6 +233,13 @@ public class CheckersGame {
 	//*****NED SOMETHING THAT USES PIECE'S INDEX, to prevent a piece from being removed
 	//and when checking for other moves, other jumps are put in that are not the associated piece that just jumped
 	//*****************************************************************
+	/**
+	 * Will Return available moves based on the players pieces,
+	 * does not return moves in the form 1-2-3-4, only single jumps
+	 * use a loop when looking for multi jumps
+	 * @param p the player
+	 * @return
+	 */
 	public Move[] AvailableMoves(Player p) {
 		ArrayList<Move> singleMoves = new ArrayList<Move>();
 		ArrayList<Move> jumpMoves = new ArrayList<Move>();
@@ -336,13 +334,11 @@ public class CheckersGame {
 
 		//filter out moves that are not apart of the last jump
 		if(inJump) {
-//			System.out.println("CHECKING");
 			for(int i = 0; i < jumpMoves.size() ; i++ ) {
 				if(jumpMoves.get(i).start!=lastJumpPiece) {
 					jumpMoves.remove(i);
 				}
 			}
-			//jumpMoves.toArray(tmp);
 		}
 		
 		if(jumpMoves.isEmpty()) {
@@ -352,8 +348,6 @@ public class CheckersGame {
 			tmp = new Move[jumpMoves.size()];
 			jumpMoves.toArray(tmp);
 		}
-
-		//moves.toArray(tmp);
 		return tmp;
 	}
 	
@@ -476,13 +470,16 @@ public class CheckersGame {
 			case REG_BLACK :
 				piece = "BLACK PIECE";
 				break;
+			case EMPTY : 
+				break;//do nothing
 		}
 		System.out.println("Removed "+piece+" on "+(removeme+1));
 		if(removeme<0) {
-			return;
+			return;//not a space
 		}
 		boardspot[removeme] = Piece.EMPTY;
 	}
+	
 	public void GameOver(Player winner,String reason) {
 		System.out.println(reason);
 		System.out.println(winner+" wins");
