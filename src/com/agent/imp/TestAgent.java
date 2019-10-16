@@ -20,6 +20,8 @@ public class TestAgent implements Agent {
 	public Player p;
 	public CheckerBoard board;
 	public CheckersGame game;
+	public ArrayList<Move> move = new ArrayList<Move>();
+	
 	@Override
 	public void Init(Player p,CheckersGame game,  CheckerBoard board) {
 		this.p = p;
@@ -34,6 +36,8 @@ public class TestAgent implements Agent {
 		//int index = (int)(Math.random()*(moves.length));
 		board.playableSpaces[moves[index].start].AgentsMove(p);
 		board.playableSpaces[moves[index].end].AgentsMove(p);
+		System.out.println("----------> "+moves[index].start+"-"+moves[index].end);
+		Collect(moves[index]);
 	}
 	public List<Move> FindAvailableMoves() {
 		List<Move> moves = null;
@@ -417,13 +421,27 @@ public class TestAgent implements Agent {
 
 	@Override
 	public void ClearCollectMoves() {
-		// TODO Auto-generated method stub
+		int [] tmpmove = new int[move.size() +1 ];
+		for(int i =0 ;i < move.size() ; i++) {
+			tmpmove[i]=move.get(i).start+1;
+		}
+		tmpmove[move.size()]=move.get(move.size()-1).end+1;//get the last move
+		System.out.println();
+		String printmove="";
+		for(int i =0 ; i < tmpmove.length ; i++) {
+			printmove+=tmpmove[i];
+			if(i != (tmpmove.length -1)) { 
+				printmove+="-";
+			}
+		}
+		System.out.println("MOVE -> "+printmove);
+		move=new ArrayList<Move>();
 		
 	}
 
 	@Override
 	public void Collect(Move m) {
-		// TODO Auto-generated method stub
+		move.add(m);
 		
 	}
 }
