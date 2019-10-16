@@ -3,7 +3,7 @@ package com.agent.imp;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.agent.Action;
+
 import com.agent.Agent;
 import com.agent.State;
 import com.checkersgame.CheckersGame;
@@ -45,10 +45,7 @@ public class TestAgent implements Agent {
 		return (List<Move>)moves;
 	}
 
-	@Override
-	public Action Percieve(State s) {
-		return null;
-	}
+
 	
 	//a method to find the "best move", defined by many parameters (feel free to edit weights)
 	public int FindBestMove() {
@@ -416,5 +413,17 @@ public class TestAgent implements Agent {
 		else if (p == Player.RED)
 			p = Player.BLACK;
 		return nextJumps;
+	}
+
+	@Override
+	public void ClearCollectMoves() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void Collect(Move m) {
+		// TODO Auto-generated method stub
+		
 	}
 }
