@@ -69,20 +69,33 @@ public class StateUtility {
 		return piece;
 	}
 	
-//	public static Move[] AvailableMoves(Player p, Piece[] state) {
-//		//the intial single moves or jumps
-//		Move[] startMoves = AvailableSingleMoves(p,state);
-//		for(Move m:startMoves) {
-//			ArrayList<Integer> move_nums = new ArrayList<Integer>();
-//			Piece[] newState = state;
-//			
-//			if(m.isJump) {
-//				
-//			}
-//		}
-//		
-//		
-//	}
+	public static Move[] CompleteMoves(Player p, Piece[] state) {
+		
+		//the intial single moves or jumps
+		Move[] startMoves = AvailableSingleMoves(p,state);
+		
+		boolean startIsJump = false;
+		for(Move m : startMoves) {
+			if(m.isJump) {
+				startIsJump = true;
+			}
+		}
+		
+		if(!startIsJump) {//there are not jumps in the set
+			return startMoves;//just return the move[]
+		}
+		
+		//otherwise we have to complete the jumps
+		
+		for(Move m : startMoves) {
+			ArrayList<Integer> move_nums = new ArrayList<Integer>();
+			Piece[] newState = state;
+			
+			
+		}
+		
+		
+	}
 	
 	public static void ResetHolding() {
 		cb_holdpiece=false;
@@ -248,7 +261,11 @@ public class StateUtility {
 	}
 	
 	/**
-	 * Copy of Checkers game avaiablemoves
+	 * Copy of Checkers game avaiablemoves,
+	 * will return an array of Move,
+	 * if there are jump moves the single available moves are ignored
+	 * DOES not return Move[] of completed jumps
+	 * (if a multijump exists this does not return it)
 	 * @param p
 	 * @param state
 	 * @return
