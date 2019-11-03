@@ -2,6 +2,10 @@ package com.agent;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import com.checkersgame.CheckersGame;
 import com.checkersgame.Move;
@@ -15,13 +19,20 @@ import com.checkersgame.gui.BoardUtility;
  */
 public class StateUtility {
 	
-	public static Player cb_game_playersTurn;
+	public static Player playersTurn;
 	public static boolean cb_holdpiece = false;
 	
+	public static boolean cg_turnTaken = false;
 	
 	public static boolean inJump=false;
 	public static int lastJumpPiece=-1;
 	
+	/**
+	 * Returns where the players pieces are on the board in the state 
+	 * @param p	which player
+	 * @param state the state we are asking about
+	 * @return
+	 */
 	public static int[] PlayersPieces(Player p, Piece[] state) {
 		ArrayList<Integer> piecesIndex = new ArrayList<Integer>();
 		for(int i = 0 ; i < state.length ; i++ ) {
@@ -34,14 +45,23 @@ public class StateUtility {
 				piecesIndex.add(i);
 			}
 		}
+		
 		int[] tmp = new int[piecesIndex.size()];
 		for(int i = 0 ; i < tmp.length ; i++ ) {
 			tmp[i] = piecesIndex.get(i);
 		}
+		
 		return tmp;
 	}
 	
 	
+	/**
+	 * This is for a single jump, returns the spot where a piece should exist
+	 * does not check the jumped piece's existance
+	 * @param start where does the jump start
+	 * @param end where does it end
+	 * @return
+	 */
 	public static int getJumpedPiece(int start , int end) {
 		int piece = -2;
 		int rowNum=start/4;//rows : 0, 1, 2, 3, 4, 5, 6, 7
@@ -69,39 +89,78 @@ public class StateUtility {
 		return piece;
 	}
 	
-	public static Move[] CompleteMoves(Player p, Piece[] state) {
+	public static Move[] GetCompleteMoves(Player p, Piece[] state) {
+		
+		//save the state so we can use it for each move
+		Piece[] tmp =  state;//we dont actually want to change the state until the move is taken
 		
 		//the intial single moves or jumps
-		Move[] startMoves = AvailableSingleMoves(p,state);
+/**->**/Move[] startMoves = AvailableSingleMoves(p,state);
 		
-		boolean startIsJump = false;
+/**->**/boolean startIsJump = false;
 		for(Move m : startMoves) {
 			if(m.isJump) {
 				startIsJump = true;
 			}
 		}
-		
+		//just return the single step moves
 		if(!startIsJump) {//there are not jumps in the set
 			return startMoves;//just return the move[]
 		}
-		
+		//set of states each move will leave the board in
+/**->**/ArrayList<Piece[]> endingStates =  new ArrayList<Piece[]>(); 
 		//otherwise we have to complete the jumps
-		
-		for(Move m : startMoves) {
-			ArrayList<Integer> move_nums = new ArrayList<Integer>();
-			Piece[] newState = state;
-			
-			
+		//should really return the state that the jumps will leave the board in
+		Move[] tmpMoves = startMoves.clone();//copy moves into tmp
+		LinkedList<Move> uncompleted = new LinkedList<Move>();//basically a queue
+		for(int i=0; i < tmpMoves.length; i ++) {
+			uncompleted.add(tmpMoves[i]);
 		}
-		
-		
+//Complete the moves
+		HashMap<Move,Piece[]> move = new HashMap<Move,Piece[]>();
+		//for(Move m : tmpMoves) {
+		while(!uncompleted.isEmpty()) {	
+			Move m = uncompleted.removeFirst();
+			//ArrayList<Integer> move_nums = new ArrayList<Integer>();
+			Piece[] newState = state.clone();//copy the state into a new variable, so we dont disturb the board
+			//go until done
+			cg_turnTaken=false;//flag to ensure the move continues until that piece can no long move(jump)
+			while(!cg_turnTaken) {
+				System.out.println("Checking "+m);
+				//move into next state
+				newState = SimulateMove(m,p,newState);//move the piece, newState will have the next state
+				//get next available jumps, make sure it is the start (flags?)
+				Move[] contMoves = AvailableSingleMoves(p, newState);
+				//contMoves will be length 0, 1 or more
+				for(int i = 0 ; i < contMoves.length ; i++) {
+					//uncompleted.add(contMoves[i]);
+				}
+				if(contMoves==null || contMoves.length==0) {
+					cg_turnTaken=false;
+				}
+			}
+			
+			//collect, and 
+			move.put(m,newState);//
+			//next move
+		}
+		return (Move[]) move.keySet().toArray();
+		//return null;
 	}
 	
+	//cb_holdingpiece= false
 	public static void ResetHolding() {
 		cb_holdpiece=false;
 		//heldpieceoriginalspace=nullspace;
 	}
 	
+	/**
+	 * True if the int start exists in the set of moves m's start indices
+	 * @param start
+	 * @param p
+	 * @param m
+	 * @return
+	 */
 	public static boolean pieceExistsInAvailableMovesStart(int start,Player p,Move[] m) {
 		boolean flag=false;
 		//Move[] m = AvailableMoves(p);
@@ -113,6 +172,14 @@ public class StateUtility {
 		return flag;
 	}
 	
+	/**
+	 * True if the move given by start and end exists in the set of moves m for player p
+	 * @param start
+	 * @param end
+	 * @param p
+	 * @param m
+	 * @return
+	 */
 	public static boolean pieceExistsInAvailableMovesEnd(int start, int end,Player p,Move[] m) {
 		boolean flag=false;
 		//Move[] m = AvailableMoves(p);
@@ -123,6 +190,12 @@ public class StateUtility {
 		}
 		return flag;
 	}
+	/**
+	 * Removes a piece from the board, print to console what is removed
+	 * does not check if there is a piece there
+	 * @param removeme
+	 * @param state
+	 */
 	public static void Remove(int removeme,Piece[] state) {
 		String piece="";
 		switch(state[removeme]) {
@@ -148,52 +221,61 @@ public class StateUtility {
 		state[removeme] = Piece.EMPTY;
 	}
 	
+	/**
+	 * The moves start and end
+	 * Should only be used for 
+	 * @param start
+	 * @param end
+	 * @param state
+	 */
 	public static void Move(int start, int end,Piece[] state) {
 		if(start == end) {
 			return;//can't pass
 		}
 		Piece temp = state[start];//save
 		//check if any pieces are removed
-		state[start]=Piece.EMPTY;//reset, will always be empty unless the piece manages to return here
-		state[end]=temp;//set
+		state[start]=Piece.EMPTY;//remove the piece from the start
+		state[end]=temp;//put the piece on the end index
 	}
 	
 	
-	public void AgentsMove(Move agentsMove,Player p, Piece[] state) {
+	public static Piece[] SimulateMove(Move agentsMove,Player p, Piece[] state) {
+		Piece[] newState = state;
 		
-		int id = agentsMove.end;
+		int start = agentsMove.start;
+		int end = agentsMove.end;
 		boolean pieceKingedThisTurn=false;
 		Move[] moves;
 		
-		if(cb_game_playersTurn == Player.BLACK) {
-			moves = AvailableSingleMoves(Player.BLACK,state);
+		if(playersTurn == Player.BLACK) {
+			moves = AvailableSingleMoves(Player.BLACK,newState);
 		} else {//red
-			moves = AvailableSingleMoves(Player.RED,state);
+			moves = AvailableSingleMoves(Player.RED,newState);
 		}
 		
-		if(!cb_holdpiece && (state[id] == Piece.EMPTY) ) {//probably dont need this
-			return;//do nothing
+		if(!cb_holdpiece && (newState[end] == Piece.EMPTY) ) {//probably dont need this
+			return newState;//do nothing
 		} else if(cb_holdpiece) {//try to place the piece
-			if( Player.BLACK == cb_game_playersTurn &&
-				pieceExistsInAvailableMovesEnd(agentsMove.start, id, Player.BLACK, moves)
+			if( Player.BLACK == playersTurn &&
+				pieceExistsInAvailableMovesEnd(agentsMove.start, end, Player.BLACK, moves)
 				//cb.game.pieceExistsInAvailableMovesEnd(cb.heldpieceoriginalspace.id,id,Player.BLACK)	
 				) {
 				//remove piece
-				int removedpiece = getJumpedPiece(agentsMove.start, id);
-				Move(agentsMove.start,id,state);//place the piece
+				int removedpiece = getJumpedPiece(start,end);
+				Move(agentsMove.start,end,newState);//place the piece
 				//check if it is a king now
-				if(state[id] != Piece.KING_BLACK && (id == 31 || id == 30 || id == 29 || id == 28 )) {
-					state[id] = Piece.KING_BLACK;
+				if(newState[end] != Piece.KING_BLACK && (end == 31 || end == 30 || end == 29 || end == 28 )) {
+					newState[end] = Piece.KING_BLACK;
 					pieceKingedThisTurn=true;//need to end turn taking
 				}
 				//else if is already a king
 				if(removedpiece>=0) {
 					
-					Remove(removedpiece,state);
+					Remove(removedpiece,newState);
 					//check for more jumps
 					inJump = true;
-					lastJumpPiece=id;
-					moves = AvailableSingleMoves(Player.BLACK,state);
+					lastJumpPiece=end;
+					moves = AvailableSingleMoves(Player.BLACK,newState);
 					for(Move m : moves) {
 						System.out.println("new moves "+m);
 					}
@@ -203,24 +285,24 @@ public class StateUtility {
 
 				//check for more jumps
 
-			} else if( Player.RED == cb_game_playersTurn &&
-					   CheckersGame.pieceExistsInAvailableMovesEnd(agentsMove.start, id, Player.RED, moves)
+			} else if( Player.RED == playersTurn &&
+					   CheckersGame.pieceExistsInAvailableMovesEnd(agentsMove.start, end, Player.RED, moves)
 					   //cb.game.pieceExistsInAvailableMovesEnd(cb.heldpieceoriginalspace.id,id,Player.RED)	
 					   ){//RED
 				//remove piece
-				int removedpiece = getJumpedPiece(agentsMove.start, id);
-				Move(agentsMove.start,id,state);
+				int removedpiece = getJumpedPiece(start, end);
+				Move(agentsMove.start,end,newState);
 				//check if it kinged
-				if(state[id] != Piece.KING_RED && (id == 0 || id == 1 || id == 2 || id == 3) ) {
-					state[id] = Piece.KING_RED;
+				if(newState[end] != Piece.KING_RED && (end == 0 || end == 1 || end == 2 || end == 3) ) {
+					newState[end] = Piece.KING_RED;
 					pieceKingedThisTurn=true;
 				}
 				if(removedpiece>=0) {
-					Remove(removedpiece,state);
+					Remove(removedpiece,newState);
 					//check for more jumps
 					inJump = true;
-					lastJumpPiece=id;
-					moves = AvailableSingleMoves(Player.RED,state);
+					lastJumpPiece=end;
+					moves = AvailableSingleMoves(Player.RED,newState);
 					for(Move m : moves) {
 						System.out.println("new moves "+m);
 					}
@@ -229,13 +311,13 @@ public class StateUtility {
 				}
 				
 			} else {
-				return;
+				return newState;
 			}
 			
 			//cb.PlacePiece(id);
 			if(moves==null) {
 //				System.out.println("MOVES NULL");
-				CheckersGame.turnTaken=true;
+				cg_turnTaken=true;
 				inJump = false;//reset stuff
 				lastJumpPiece=-1;//reset stuff
 			} else {
@@ -247,17 +329,19 @@ public class StateUtility {
 				}
 				if(!jumpMovesLeft) {
 //					System.out.println("!jumpMovesLeft");
-					CheckersGame.turnTaken=true;
+					cg_turnTaken=true;
 					inJump = false;//reset stuff
 					lastJumpPiece=-1;//reset stuff
 				}
 			}
 			if(pieceKingedThisTurn) {
-				CheckersGame.turnTaken=true;
+				cg_turnTaken=true;
 				inJump = false;//reset stuff
 				lastJumpPiece=-1;//reset stuff
 			}
-		} 
+		}
+		//after this the new state is returned
+		return newState; 
 	}
 	
 	/**
@@ -273,11 +357,15 @@ public class StateUtility {
 	public static Move[] AvailableSingleMoves(Player p,Piece[] state) {
 		ArrayList<Move> singleMoves = new ArrayList<Move>();
 		ArrayList<Move> jumpMoves = new ArrayList<Move>();
+		
 		int[] pieces = StateUtility.PlayersPieces(p,state);
 		if(Player.BLACK == p ) {
+			//go through player's checkers
 			for(int index = 0 ; index < pieces.length ; index++ ) {
+				//grab possible locations where the pieces could move or jump
 				int[] possibleMoves = BoardUtility.singleMoves[pieces[index]];
 				int[] possibleJumps = BoardUtility.singleJumps[pieces[index]];
+				
 				if(state[pieces[index]] == Piece.KING_BLACK) {//the piece is a king
 					//check moves
 					for(int i=0 ; i < possibleMoves.length ; i++ ) {
@@ -304,11 +392,11 @@ public class StateUtility {
 					}
 					//checkjumps
 					for(int i=0 ; i < possibleJumps.length ; i++ ) {
-						int jumpedPiece = getJumpedPiece(pieces[index], possibleJumps[i]);
+						int jumpedPiece = getJumpedPiece(pieces[index], possibleJumps[i]);//negative if EMPTY
 						if( state[possibleJumps[i]] == Piece.EMPTY && //is the landing spot empty
 							jumpedPiece >=0  && //is there a piece to jump
 							//opponent piece?
-							(state[jumpedPiece] == Piece.KING_RED|| state[jumpedPiece]  == Piece.REG_RED) &&
+							(state[jumpedPiece] == Piece.KING_RED || state[jumpedPiece]  == Piece.REG_RED) &&
 							pieces[index] < possibleJumps[i]) {//is the piece going in the correct direction
 							jumpMoves.add(new Move(pieces[index], possibleJumps[i],true));//then add it
 						}
