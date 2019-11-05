@@ -35,20 +35,21 @@ public class CheckersGame	{
 		// This array of Piece's keep track of the board, and the pieces on it.
 		boardspot = new Piece[] {
 				
-				// It's a row of four because we dismiss the spaces we can't touch, the grey squares.
-				Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK,
-				Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, 
-				Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, 
-				Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,
-				Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,
-				Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
-				Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
-				Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
+			// It's a row of four because we dismiss the spaces we can't touch, the grey squares.
+			Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK,
+			Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, 
+			Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, 
+			Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,
+			Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,
+			Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
+			Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
+			Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
 		};
 		
+		// The chunk of code below was for Testing I believe. Not 100% sure.
 		/*		
 		
-		//king jumps
+		// The Board is setup for King Jumps
 		boardspot = new Piece[]	{
 		
 			Piece.EMPTY, Piece.EMPTY, 	Piece.EMPTY, 	Piece.EMPTY,
@@ -61,7 +62,7 @@ public class CheckersGame	{
 			Piece.EMPTY, Piece.EMPTY,   Piece.EMPTY,    Piece.EMPTY,
 		};
 		
-		//king double jumps
+		// The Board is setup for King Double Jumps
 		boardspot = new Piece[] {
 		
 			Piece.EMPTY, Piece.EMPTY, 	Piece.EMPTY, 		Piece.EMPTY,
@@ -74,7 +75,7 @@ public class CheckersGame	{
 			Piece.EMPTY, Piece.EMPTY,   Piece.KING_BLACK,   Piece.EMPTY,
 		};
 		
-		//more jumps available after first jump
+		// The Board is setup for more Jumps after a Jump, BLACK
 		boardspot = new Piece[] {
 		
 			Piece.EMPTY, 		Piece.EMPTY, 	Piece.EMPTY, 		Piece.EMPTY,
@@ -87,7 +88,7 @@ public class CheckersGame	{
 			Piece.EMPTY, 		Piece.EMPTY,  	Piece.EMPTY,		Piece.EMPTY,
 		};
 		
-		//more jumps available after first jump, RED
+		// The Board is setup for more Jumps after a Jump, RED
 		boardspot = new Piece[] {
 		
 			Piece.EMPTY, 		Piece.EMPTY, 		Piece.EMPTY, 		Piece.REG_BLACK,
@@ -103,19 +104,31 @@ public class CheckersGame	{
 		*/
 	}
 	
-	/**
-	 * Utility to count pieces black has
-	 * @return
+	/*
+	 *  Utility to count the number of black pieces on the board
+	 *  @return
 	 */
-	public int NumberOfBlackPieces() {
+	public int NumberOfBlackPieces()	{
+		
 		int sum = 0;
-		for(Piece i : boardspot) {
-			if(i==Piece.REG_BLACK || i==Piece.KING_BLACK) {
+		
+		// Enhanced for loop checking every Piece "i" on the board
+		for(Piece i : boardspot)	{
+			
+			// If a regular piece or a king piece is "BLACK"
+			if (i == Piece.REG_BLACK || i == Piece.KING_BLACK)	{
+				
+				// Count the Piece
 				sum++;
 			}
 		}
+		
+		// Return the number of Black Pieces on the board
 		return sum;
 	}
+	
+//------------------------------------------------------------------------------------------------ CONTINUE HERE -------------------------------------------------------------------------------
+	
 	/**
 	 * Utility to count pieces red has
 	 * @return
