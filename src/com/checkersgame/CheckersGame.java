@@ -1,84 +1,106 @@
 // This puts "CheckersGame.java" into the package "com.checkersgame"
 package com.checkersgame;
 
-// Imports for Program
+// Imports for Program, Array Lists
 import java.util.ArrayList;
+
+// Importing the package containing the GUI "BoardUtility.java"
+// to be able to change the GUI to match it with this Game of Checkers
 import com.checkersgame.gui.BoardUtility;
 
-	// The Class creates the Game of Checkers
-	public class CheckersGame	{
+// The Class creates the Game of Checkers
+public class CheckersGame	{
 		
-		// This object is the "Player", it's a Enum Class 
-		public Player playersTurn;
+	// This object is the "Player", it's a Enum Class object
+	// to represent the players control over their pieces.
+	public Player playersTurn;
 		
-		
-		public Piece[] boardspot;
-		
-		public static boolean turnTaken=false;
+	// This is a list of "Piece"'s to build the checker board.
+	// Each index in the array represents a space on the board,
+	// whether if it's a piece or an empty space. 
+	public Piece[] boardspot;
 	
-		public boolean inJump=false;
-		public int lastJumpPiece=-1;
+	// This will keep track whether someone has taken their turn,
+	// it's set to false to let you take your turn.
+	public static boolean turnTaken = false;
 	
-		public CheckersGame() {
-			
-			boardspot = new Piece[] {
-					
-					Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK,
-					Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, 
-					Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, 
-					Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,
-					Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,
-					Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
-					Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
-					Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
-			};
+	// I THINK THIS IS TO KEEP TRACK OF JUMPING
+	// REMEMBER TO COME BACK TO EXPLAIN THIS ONE BETTER
+	public boolean inJump=false;
+	public int lastJumpPiece=-1;
+	
+	// This is the Game of Checkers, setting the board up.
+	public CheckersGame() {
 		
-//king jumps
-//		boardspot = new Piece[] {
-//				Piece.EMPTY, Piece.EMPTY, Piece.EMPTY, Piece.EMPTY,
-//				Piece.EMPTY, Piece.EMPTY, Piece.EMPTY, Piece.EMPTY, 
-//				Piece.EMPTY, 	 Piece.EMPTY,	  Piece.EMPTY, 	   Piece.EMPTY, 
-//				Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,
-//				Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,
-//				Piece.EMPTY,   Piece.EMPTY,   Piece.EMPTY,   Piece.KING_BLACK,
-//				Piece.EMPTY,   Piece.REG_RED,     Piece.REG_RED,   Piece.EMPTY,
-//				Piece.EMPTY,   Piece.EMPTY,   Piece.EMPTY,   Piece.EMPTY,
-//		};
+		// This array of Piece's keep track of the board, and the pieces on it.
+		boardspot = new Piece[] {
+				
+				// It's a row of four because we dismiss the spaces we can't touch, the grey squares.
+				Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK,
+				Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, 
+				Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, 
+				Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,
+				Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,
+				Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
+				Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
+				Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
+		};
 		
-//king double jumps
-//		boardspot = new Piece[] {
-//		Piece.EMPTY, Piece.EMPTY, Piece.EMPTY, Piece.EMPTY,
-//		Piece.EMPTY, Piece.EMPTY, Piece.EMPTY, Piece.EMPTY, 
-//		Piece.EMPTY, 	 Piece.EMPTY,	  Piece.EMPTY, 	   Piece.EMPTY, 
-//		Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,
-//		Piece.EMPTY,     Piece.REG_RED,     Piece.EMPTY,     Piece.EMPTY,
-//		Piece.EMPTY,   Piece.EMPTY,   Piece.EMPTY,   Piece.EMPTY,
-//		Piece.EMPTY,   Piece.REG_RED,     Piece.EMPTY,   Piece.EMPTY,
-//		Piece.EMPTY,   Piece.EMPTY,   Piece.KING_BLACK,   Piece.EMPTY,
-//};
-////more jumps available after first jump
-//		boardspot = new Piece[] {
-//		Piece.EMPTY, 	Piece.EMPTY, 	Piece.EMPTY, 		Piece.EMPTY,
-//		Piece.EMPTY, 	Piece.EMPTY,	Piece.EMPTY, 		Piece.EMPTY, 
-//		Piece.EMPTY, 	Piece.EMPTY, 	Piece.EMPTY, 		Piece.EMPTY, 
-//		Piece.REG_BLACK, 	Piece.REG_RED, 	Piece.REG_RED,    	Piece.EMPTY,
-//		Piece.REG_RED, 	Piece.EMPTY,	Piece.EMPTY,    	Piece.EMPTY,
-//		Piece.EMPTY, 	Piece.REG_RED,  	Piece.REG_RED,   		Piece.EMPTY,
-//		Piece.KING_BLACK, 	Piece.EMPTY,	Piece.EMPTY,		Piece.EMPTY,
-//		Piece.EMPTY, 	Piece.EMPTY,  	Piece.EMPTY,		Piece.EMPTY,
-//};
+		/*		
 		
-//more jumps available after first jump, RED
-//			boardspot = new Piece[] {
-//			Piece.EMPTY, 	Piece.EMPTY, 	Piece.EMPTY, 		Piece.REG_BLACK,
-//			Piece.EMPTY, 	Piece.EMPTY,	Piece.EMPTY, 		Piece.EMPTY, 
-//			Piece.EMPTY, 	Piece.EMPTY, 	Piece.EMPTY, 		Piece.EMPTY, 
-//			Piece.KING_RED, 	Piece.REG_BLACK, 	Piece.REG_BLACK,    	Piece.EMPTY,
-//			Piece.REG_BLACK, 	Piece.REG_BLACK,	Piece.EMPTY,    	Piece.EMPTY,
-//			Piece.EMPTY, 	Piece.EMPTY,  	Piece.REG_BLACK,   		Piece.EMPTY,
-//			Piece.KING_RED, 	Piece.EMPTY,	Piece.EMPTY,		Piece.EMPTY,
-//			Piece.EMPTY, 	Piece.EMPTY,  	Piece.EMPTY,		Piece.EMPTY,
-//	};
+		//king jumps
+		boardspot = new Piece[]	{
+		
+			Piece.EMPTY, Piece.EMPTY, 	Piece.EMPTY, 	Piece.EMPTY,
+			Piece.EMPTY, Piece.EMPTY, 	Piece.EMPTY, 	Piece.EMPTY, 
+			Piece.EMPTY, Piece.EMPTY, 	Piece.EMPTY, 	Piece.EMPTY, 
+			Piece.EMPTY, Piece.EMPTY, 	Piece.EMPTY, 	Piece.EMPTY,
+			Piece.EMPTY, Piece.EMPTY, 	Piece.EMPTY, 	Piece.EMPTY,
+			Piece.EMPTY, Piece.EMPTY, 	Piece.EMPTY, 	Piece.KING_BLACK,
+			Piece.EMPTY, Piece.REG_RED, Piece.REG_RED,  Piece.EMPTY,
+			Piece.EMPTY, Piece.EMPTY,   Piece.EMPTY,    Piece.EMPTY,
+		};
+		
+		//king double jumps
+		boardspot = new Piece[] {
+		
+			Piece.EMPTY, Piece.EMPTY, 	Piece.EMPTY, 		Piece.EMPTY,
+			Piece.EMPTY, Piece.EMPTY, 	Piece.EMPTY, 		Piece.EMPTY, 
+			Piece.EMPTY, Piece.EMPTY,	Piece.EMPTY, 		Piece.EMPTY, 
+			Piece.EMPTY, Piece.EMPTY,   Piece.EMPTY, 		Piece.EMPTY,
+			Piece.EMPTY, Piece.REG_RED, Piece.EMPTY, 		Piece.EMPTY,
+			Piece.EMPTY, Piece.EMPTY,   Piece.EMPTY, 		Piece.EMPTY,
+			Piece.EMPTY, Piece.REG_RED, Piece.EMPTY, 		Piece.EMPTY,
+			Piece.EMPTY, Piece.EMPTY,   Piece.KING_BLACK,   Piece.EMPTY,
+		};
+		
+		//more jumps available after first jump
+		boardspot = new Piece[] {
+		
+			Piece.EMPTY, 		Piece.EMPTY, 	Piece.EMPTY, 		Piece.EMPTY,
+			Piece.EMPTY, 		Piece.EMPTY,	Piece.EMPTY, 		Piece.EMPTY, 
+			Piece.EMPTY, 		Piece.EMPTY, 	Piece.EMPTY, 		Piece.EMPTY, 
+			Piece.REG_BLACK, 	Piece.REG_RED, 	Piece.REG_RED,    	Piece.EMPTY,
+			Piece.REG_RED, 		Piece.EMPTY,	Piece.EMPTY,    	Piece.EMPTY,
+			Piece.EMPTY, 		Piece.REG_RED, 	Piece.REG_RED,   	Piece.EMPTY,
+			Piece.KING_BLACK, 	Piece.EMPTY,	Piece.EMPTY,		Piece.EMPTY,
+			Piece.EMPTY, 		Piece.EMPTY,  	Piece.EMPTY,		Piece.EMPTY,
+		};
+		
+		//more jumps available after first jump, RED
+		boardspot = new Piece[] {
+		
+			Piece.EMPTY, 		Piece.EMPTY, 		Piece.EMPTY, 		Piece.REG_BLACK,
+			Piece.EMPTY, 		Piece.EMPTY,		Piece.EMPTY, 		Piece.EMPTY, 
+			Piece.EMPTY, 		Piece.EMPTY, 		Piece.EMPTY, 		Piece.EMPTY, 
+			Piece.KING_RED, 	Piece.REG_BLACK, 	Piece.REG_BLACK,    Piece.EMPTY,
+			Piece.REG_BLACK, 	Piece.REG_BLACK,	Piece.EMPTY,    	Piece.EMPTY,
+			Piece.EMPTY, 		Piece.EMPTY, 	 	Piece.REG_BLACK,   	Piece.EMPTY,
+			Piece.KING_RED, 	Piece.EMPTY,		Piece.EMPTY,		Piece.EMPTY,
+			Piece.EMPTY, 		Piece.EMPTY,  		Piece.EMPTY,		Piece.EMPTY,
+		};
+		
+		*/
 	}
 	
 	/**
