@@ -1,6 +1,8 @@
+// This puts "RunAGame.java" into Package "com"
 package com;
-import java.util.Scanner;
 
+// Imports for the Program
+import java.util.Scanner;
 import com.agent.Agent;
 import com.agent.imp.GREG;
 import com.agent.imp.OtherBot;
@@ -8,15 +10,15 @@ import com.agent.imp.TestAgent;
 import com.checkersgame.*;
 import com.checkersgame.gui.CheckerBoard;
 
-/**
- * Main class
- * 
- */
-public class RunAGame {
-	public static void main(String ... args) throws Exception {
+// The Class that Runs the Game
+	public class RunAGame 	{
 		
-		//main game logic
+		// Main
+		public static void main(String ... args) throws Exception	{
+		
+		// Main game logic
 		CheckersGame theGame = new CheckersGame();
+		
 		//the gui, and some logic...
 		CheckerBoard theBoard= new CheckerBoard(theGame);
 		

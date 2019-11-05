@@ -1,29 +1,37 @@
+// This puts "CheckersGame.java" into the package "com.checkersgame"
 package com.checkersgame;
 
+// Imports for Program
 import java.util.ArrayList;
 import com.checkersgame.gui.BoardUtility;
 
-//The game of checkers
-public class CheckersGame {
+	// The Class creates the Game of Checkers
+	public class CheckersGame	{
+		
+		// This object is the "Player", it's a Enum Class 
+		public Player playersTurn;
+		
+		
+		public Piece[] boardspot;
+		
+		public static boolean turnTaken=false;
 	
-	public Player playersTurn;
-	public Piece[] boardspot;
-	public static boolean turnTaken=false;
+		public boolean inJump=false;
+		public int lastJumpPiece=-1;
 	
-	public boolean inJump=false;
-	public int lastJumpPiece=-1;
-	
-	public CheckersGame() {
-		boardspot = new Piece[] {
-				Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK,
-				Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, 
-				Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, 
-				Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,
-				Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,
-				Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
-				Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
-				Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
-		};
+		public CheckersGame() {
+			
+			boardspot = new Piece[] {
+					
+					Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK,
+					Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, 
+					Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, 
+					Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,
+					Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,
+					Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
+					Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
+					Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
+			};
 		
 //king jumps
 //		boardspot = new Piece[] {
