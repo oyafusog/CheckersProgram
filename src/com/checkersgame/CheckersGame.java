@@ -26,8 +26,8 @@ public class CheckersGame	{
 	
 	// I THINK THIS IS TO KEEP TRACK OF JUMPING
 	// REMEMBER TO COME BACK TO EXPLAIN THIS ONE BETTER
-	public boolean inJump=false;
-	public int lastJumpPiece=-1;
+	public boolean inJump = false;
+	public int lastJumpPiece = -1;
 	
 	// This is the Game of Checkers, setting the board up.
 	public CheckersGame() {
@@ -128,8 +128,8 @@ public class CheckersGame	{
 	}
 	
 	/**
-	 * Utility to count the number of red pieces on the board
-	 * @return
+	 * 	Utility to count the number of red pieces on the board
+	 * 	@return
 	 */
 	public int NumberOfRedPieces()	{
 		
@@ -180,17 +180,22 @@ public class CheckersGame	{
 			// The Move is Invalid
 			return false;
 		} 
-		// 
-		else if( ValidSingleMove(m,p)) {//single move is ok?
+		// If the Move is Single, and not a jump
+		else if(ValidSingleMove(m,p))	{
 			
+			// The Move is Valid
 			return true;
 		} 
-		else if( ValidJump(m,p) ) {//jump move ok?
+		// If the Move is a valid Jump
+		else if(ValidJump(m,p))	{
 			
+			// The Move is Valid
 			return true;
 		} 
-		else { //the move is valid
+		// The Move is Invalid
+		else	{ 
 			
+			// Return Invalid
 			return false;
 		}
 	}
@@ -222,6 +227,8 @@ public class CheckersGame	{
 	}
 	
 	/**
+	 * 	
+	 * 
 	 * It is assumed that if there is a multi jump that
 	 * it is defined in an array in move at this point (STILL NEEDS TO BE DONE)
 	 * @param m
@@ -297,6 +304,8 @@ public class CheckersGame	{
 	 * 	This checks to see if the move is valid
 	 * 	- This isn't for multi-jumps, only for single jumps
 	 * 
+	 * 	SIDE NOTE: I don't think we need to check the color here, doesn't "isValidForwardMove" already do that?
+	 * 
 	 * @param m
 	 * @param p
 	 * @return
@@ -309,50 +318,70 @@ public class CheckersGame	{
 		// If it's a king
 		if(isKing)	{
 			
+			// Return with BoardUtility.java, using it's method "isValidMove" to see if the move is valid
 			return BoardUtility.isValidMove(m);
 		} 
-		else if(Player.BLACK == p)	{	//non king black piece
+		// If the Player is "BLACK" (and regular)
+		else if(Player.BLACK == p)	{
 			
+			// Return with BoardUtility.java, using it's method "isValidForwardMove" to see if the move is valid
 			return BoardUtility.isValidForwardMove(m,p);
 		} 
-		else	{	//non-king red piece
+		// If the Player is "RED" (and regular)
+		else	{
 			
+			// Return with BoardUtility.java, using it's method "isValidForwardMove" to see if the move is valid
 			return BoardUtility.isValidForwardMove(m,p);
 		}
  	}
-	
+
 	//remember black starts at the lower numbers
 	//red starts at the higher numbers
 	//gives all available moves reguardless of last move
 	//*****NED SOMETHING THAT USES PIECE'S INDEX, to prevent a piece from being removed
 	//and when checking for other moves, other jumps are put in that are not the associated piece that just jumped
 	//*****************************************************************
+	
 	/**
-	 * Will Return available moves based on the players pieces,
-	 * does not return moves in the form 1-2-3-4, only single jumps
-	 * use a loop when looking for multi jumps
+	 * 	This Method checks for the Available Moves based on which pieces are on the board.
+	 * 	This Returns only Single Jumps, not Multi-Jumps in the form 1-2-3-4.
+	 * 	Using a Loop when looking for Multi-Jumps
+	 * 
 	 * @param p the player
 	 * @return
 	 */
-	public Move[] AvailableMoves(Player p) {
+	public Move[] AvailableMoves(Player p)	{
+		
 		ArrayList<Move> singleMoves = new ArrayList<Move>();
 		ArrayList<Move> jumpMoves = new ArrayList<Move>();
+		
 		int[] pieces = PlayersPieces(p);
-		if(Player.BLACK == p ) {
-			for(int index = 0 ; index < pieces.length ; index++ ) {
+		
+		if(Player.BLACK == p)	{
+			
+			for(int index = 0; index < pieces.length; index++)	{
+				
 				int[] possibleMoves = BoardUtility.singleMoves[pieces[index]];
 				int[] possibleJumps = BoardUtility.singleJumps[pieces[index]];
-				if(boardspot[pieces[index]] == Piece.KING_BLACK) {//the piece is a king
+				
+				if(boardspot[pieces[index]] == Piece.KING_BLACK)	{//the piece is a king
+					
 					//check moves
-					for(int i=0 ; i < possibleMoves.length ; i++ ) {
-						if(boardspot[possibleMoves[i]] == Piece.EMPTY) {
+					for(int i = 0; i < possibleMoves.length; i++)	{
+						
+						if(boardspot[possibleMoves[i]] == Piece.EMPTY)	{
+							
 							singleMoves.add(new Move(pieces[index], possibleMoves[i]));
 						}
 					}
+					
 					//check jumps
-					for(int i = 0 ; i < possibleJumps.length ; i++ ) {
+					for(int i = 0; i < possibleJumps.length; i++)	{
+						
 						int jumpedPiece = getJumpedPiece(pieces[index], possibleJumps[i]);
-						if( boardspot[possibleJumps[i]] == Piece.EMPTY && //
+						
+// --------------------------------------------------------------------------------------------------------------------------------------------------------- CONTINUE HERE --------------------------------------------------------------------------------------						
+						if(boardspot[possibleJumps[i]] == Piece.EMPTY && //
 							jumpedPiece >=0 && //there is a piece to jump?
 							//opponents piece?
 							(boardspot[jumpedPiece] == Piece.KING_RED|| boardspot[jumpedPiece]  == Piece.REG_RED)) {
