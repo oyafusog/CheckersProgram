@@ -151,10 +151,10 @@ public class CheckersGame	{
 	}
 	
 	/**
-	 *	Checks to see if the "Move" selected by the "Player" is vaild
+	 *	Checks to see if the "Move" selected by the "Player" is valid
 	 * 	- Move m, represents the Move
 	 *  - Player p, represents the Player making the move
-	 *  - Return true or false, whether the move is vaild or not
+	 *  - Return true or false, whether the move is valid or not
 	 *  
 	 * @param m the move
 	 * @param p the player taking the move
@@ -168,15 +168,19 @@ public class CheckersGame	{
 			// The Move is Invalid
 			return false;
 		}
-		//
-		else if(!isPlayersPiece(m,p)) {//can't move other players pieces, or non-existent pieces
+		// If you're NOT trying to move one of your Pieces		
+		else if(!isPlayersPiece(m, p))	{
 			
+			// The Move is Invalid
 			return false;
 		} 
-		else if(boardspot[m.end] != Piece.EMPTY) {//cannot put pieces on other pieces
+		// If you're trying to move your piece onto another piece
+		else if(boardspot[m.end] != Piece.EMPTY) {
 			
+			// The Move is Invalid
 			return false;
 		} 
+		// 
 		else if( ValidSingleMove(m,p)) {//single move is ok?
 			
 			return true;
@@ -288,22 +292,31 @@ public class CheckersGame	{
 		
 		return false;
 	}
+	
 	/**
-	 *  The isPlayerPiece should already be checked at this point so the 
-	 *  checker piece is already player p's piece
+	 * 	This checks to see if the move is valid
+	 * 	- This isn't for multi-jumps, only for single jumps
+	 * 
 	 * @param m
 	 * @param p
 	 * @return
 	 */
-	public boolean ValidSingleMove(Move m, Player p) {
-		//is the starting piece a king
-		boolean isKing = ( boardspot[m.start]==Piece.KING_BLACK )|| 
-						 (boardspot[m.start]==Piece.KING_RED );
-		if(isKing) {//king piece
+	public boolean ValidSingleMove(Move m, Player p)	{
+		
+		// Checks to see if this Piece is a King or not
+		boolean isKing = (boardspot[m.start] == Piece.KING_BLACK) || (boardspot[m.start] == Piece.KING_RED);
+		
+		// If it's a king
+		if(isKing)	{
+			
 			return BoardUtility.isValidMove(m);
-		} else if(Player.BLACK == p){//non king black piece
+		} 
+		else if(Player.BLACK == p)	{	//non king black piece
+			
 			return BoardUtility.isValidForwardMove(m,p);
-		} else {//non-king red piece
+		} 
+		else	{	//non-king red piece
+			
 			return BoardUtility.isValidForwardMove(m,p);
 		}
  	}

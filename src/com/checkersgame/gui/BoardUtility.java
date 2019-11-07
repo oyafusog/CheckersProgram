@@ -1,10 +1,12 @@
+// This puts "BoardUtility.java" into the package "com.checkersgame.gui
 package com.checkersgame.gui;
 
+// Imports "Player.java" and "Move.java"
 import com.checkersgame.Player;
-
 import com.checkersgame.Move;
 
 /**
+ * 	This Class is the Board Utility, holds available Moves and Jumps
  * 
  * http://www.bobnewell.net/nucleus/checkers.php?itemid=289
  * checker notation, indexes represent each single move, and jumps
@@ -16,8 +18,9 @@ import com.checkersgame.Move;
  */
 public class BoardUtility {
 	
-	//really just spaces visually adjacent
-	public static int[][] singleMoves = new int[][]{
+	// Represents Spaces visually adjacent
+	public static int[][] singleMoves = new int[][]	{
+		
 		/**0**/  new int[] {4,5},
 		/**1**/  new int[] {5,6},
 		/**2**/  new int[] {6,7},
@@ -52,18 +55,19 @@ public class BoardUtility {
 		/**31**/ new int[] {26,27} 
 	};
 	
-	//spaces that are visually a jump
-	public static int[][] singleJumps = new int[][] {
-		/**0**/ new int[] {9},
-		/**1**/ new int[] {8,10},
-		/**2**/ new int[] {9,11},
-		/**3**/ new int[] {10},
-		/**4**/ new int[] {13},
-		/**5**/ new int[] {12,14},
-		/**6**/ new int[] {13,15},
-		/**7**/ new int[] {14},
-		/**8**/ new int[] {1,17},
-		/**9**/ new int[] {0,2,16,18},
+	// Represents Spaces that are visually jumps
+	public static int[][] singleJumps = new int[][]	{
+		
+		/**0**/  new int[] {9},
+		/**1**/  new int[] {8,10},
+		/**2**/  new int[] {9,11},
+		/**3**/  new int[] {10},
+		/**4**/  new int[] {13},
+		/**5**/  new int[] {12,14},
+		/**6**/  new int[] {13,15},
+		/**7**/  new int[] {14},
+		/**8**/  new int[] {1,17},
+		/**9**/  new int[] {0,2,16,18},
 		/**10**/ new int[] {1,3,17,19},
 		/**11**/ new int[] {2,18},
 		/**12**/ new int[] {5,21},
@@ -88,86 +92,137 @@ public class BoardUtility {
 		/**31**/ new int[] {22}
 	};
 	
-	//used translate moves from numbering 1-32 to 0-31
-	//toString on move displays 1-32,
-	//code refers to numbering as 0-31
+	// Simply translating move from 1-32 into how it's stored into the array 0-31
 	public static Move TranslateMove(Move m) throws Exception {
+		
+		// Return the Move as how it's stored in an Array Index
 		return new Move(m.start-1,m.end-1);
 	}
 	
 	/**
-	 * Checks to see if a regular piece can make a move, regardless 
-	 * of there being a piece in the end position
+	 * 	This checks to see if a regular piece can make a move,
+	 * 	regardless of there being a piece in the end position
+	 * 
 	 * @param m
 	 * @param p
 	 * @return
 	 */
-	public static boolean isValidForwardMove(Move m, Player p) {
+	public static boolean isValidForwardMove(Move m, Player p)	{
+		
+		// Boolean to keep track if it can make this move
 		boolean isInAvailableMoves = false;
+		
+		// Boolean to keep track if a piece is moving in the right direction
 		boolean isCorrectDirection = false;
-		if( p == Player.BLACK) {//Player.BLACK
-			//is it the correct direction
-			if(m.end > m.start) {
+		
+		// If the Player is "BLACK"
+		if(p == Player.BLACK)	{
+			
+			// If the End is greater than the Start
+			if(m.end > m.start)	{
+				
+				// You're going in the right direction
 				isCorrectDirection = true;
 			}
-			//must be increaseing
-			for(int i = 0 ; i < singleMoves[m.start].length ; i++ ) {
-				if(m.end == singleMoves[m.start][i] ) {//need to make sure it is actually next to the start
-					isInAvailableMoves=true; 
+			
+			// Checking all the SingleMoves you can do with i
+			for(int i = 0; i < singleMoves[m.start].length; i++)	{
+				
+				// If the End is in the array of moves Start can make
+				if(m.end == singleMoves[m.start][i])	{
+					
+					// Then the move is Available
+					isInAvailableMoves = true; 
 				}
 			}
-		} else { //Player.RED 
-			//is it the correct direction
-			if(m.end < m.start) {
+		} 
+		// If the Player is "RED"
+		else	{
+			
+			// If the End is less than the Start
+			if(m.end < m.start)	{
+				
+				// You're going in the right direction
 				isCorrectDirection = true;
 			}
-			//must be decreasing
-			for(int i = 0 ; i < singleMoves[m.start].length ; i++ ) {
-				if(m.end == singleMoves[m.start][i] ) {//need to make sure it is actually next to the start
-					isInAvailableMoves=true; 
+			
+			// Checking all the SingleMoves you can do with i
+			for(int i = 0; i < singleMoves[m.start].length; i++)	{
+				
+				// If the End is in the array of moves Start can make
+				if(m.end == singleMoves[m.start][i])	{
+					
+					isInAvailableMoves = true; 
 				}
 			}
 		}
-		//did not return false so far, only thing that matters is that the
-		//end is in the set of adjacent spaces
+		
+		// Return True if you're allowed to make that move, and if it's in the right direction
 		return isInAvailableMoves && isCorrectDirection;
 	}
+	
 	/**
-	 * Determines if a single jump is valid by looking at the board
+	 * 	Checks to see if the Jump is valid, using another isValidJump Method
+	 * 
 	 * @param m
 	 * @return
 	 */
 	public static boolean isValidJump(Move m) {
-		return isValidJump(m.start,m.end);
+		
+		// Calls isValidJump using the start and end of the Move m
+		return isValidJump(m.start, m.end);
 	}
+	
 	/**
-	 * Checks the array above
+	 * 	Checks to see if you can make the jump, by looking at the array
+	 * 
 	 * @param start start number
 	 * @param end end number
 	 * @return
 	 */
-	public static boolean isValidJump(int start, int end) {
+	public static boolean isValidJump(int start, int end)	{
+		
+		// Assume the Jump isn't valid
 		boolean isJump = false;
-		for(int i = 0 ; i < singleJumps[start].length ; i++ ) {//look through jumps
-			if(singleJumps[start][i] == end) {
+		
+		// Check the array of SingleJumps 
+		for(int i = 0; i < singleJumps[start].length; i++)	{
+			
+			// If the End is on the list of SingleJumps
+			if(singleJumps[start][i] == end)	{
+				
+				// Then the Jump is valid
 				isJump = true;
 			}
 		}
+		
+		// Return whether the Jump is valid or not.
 		return isJump;
 	}
 	
 	/**
-	 * determines if the int array at index Move.start contains the int Move.end
+	 * 	Checks to see if you make this move by checking the array of "singleMoves"
+	 * 
 	 * @param m
 	 * @return
 	 */
-	public static boolean isValidMove(Move m) {
+	public static boolean isValidMove(Move m)	{
+		
+		// Assume the Move isn't valid
 		boolean isMove = false;
-		for(int i = 0 ; i < singleMoves[m.start].length ; i++ ) {//look through jumps
-			if(singleMoves[m.start][i] == m.end) {
+		
+		// Check the array of SingleMoves
+		for(int i = 0; i < singleMoves[m.start].length; i++)	{
+			
+			// If the End is on the list of "singleMoves"
+			if(singleMoves[m.start][i] == m.end)	{
+				
+				// Then the Move is valid
 				isMove = true;
 			}
 		}
+		
+		// Return whether the Move is valid or not.
 		return isMove;
 	}
 }
