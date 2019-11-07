@@ -11,13 +11,13 @@ import com.checkersgame.*;
 import com.checkersgame.gui.CheckerBoard;
 
 // The Class that Runs the Game
-	public class RunAGame 	{
+public class RunAGame	{
 		
-		// Main
+		// Main Class
 		public static void main(String ... args) throws Exception	{
 		
-		// Main game logic
-		CheckersGame theGame = new CheckersGame();
+			// Creating a new Game of Checkers, "CheckersGame" class holds the game logic
+			CheckersGame theGame = new CheckersGame();
 		
 		//the gui, and some logic...
 		CheckerBoard theBoard= new CheckerBoard(theGame);

@@ -127,58 +127,96 @@ public class CheckersGame	{
 		return sum;
 	}
 	
-//------------------------------------------------------------------------------------------------ CONTINUE HERE -------------------------------------------------------------------------------
-	
 	/**
-	 * Utility to count pieces red has
+	 * Utility to count the number of red pieces on the board
 	 * @return
 	 */
-	public int NumberOfRedPieces() {
+	public int NumberOfRedPieces()	{
+		
 		int sum = 0;
-		for(Piece i : boardspot) {
-			if(i==Piece.REG_RED || i==Piece.KING_RED) {
+		
+		// Enhanced for loop checking every Piece "i" on the board
+		for(Piece i : boardspot)	{
+			
+			// If a regular piece or a king piece is "RED"
+			if(i == Piece.REG_RED || i == Piece.KING_RED)	{
+				
+				// Count the Piece
 				sum++;
 			}
 		}
+		
+		// Return the number of Red Pieces on the board
 		return sum;
 	}
-
+	
 	/**
-	 * 
+	 *	Checks to see if the "Move" selected by the "Player" is vaild
+	 * 	- Move m, represents the Move
+	 *  - Player p, represents the Player making the move
+	 *  - Return true or false, whether the move is vaild or not
+	 *  
 	 * @param m the move
 	 * @param p the player taking the move
 	 * @return if the move is Valid
 	 */
-	public boolean isValidMove(Move m,Player p) {
-		if(m.start > 31 || m.start < 0|| m.end > 31|| m.end < 0) { //not a valid spot
+	public boolean isValidMove(Move m, Player p)	{
+		
+		// If you select a piece that isn't on the board, or select a destination that isn't on the board
+		if(m.start > 31 || m.start < 0 || m.end > 31 || m.end < 0)	{
+			
+			// The Move is Invalid
 			return false;
-		} else if(!isPlayersPiece(m,p)) {//can't move other players pieces, or non-existent pieces
+		}
+		//
+		else if(!isPlayersPiece(m,p)) {//can't move other players pieces, or non-existent pieces
+			
 			return false;
-		} else if(boardspot[m.end] != Piece.EMPTY) {//cannot put pieces on other pieces
+		} 
+		else if(boardspot[m.end] != Piece.EMPTY) {//cannot put pieces on other pieces
+			
 			return false;
-		} else if( ValidSingleMove(m,p)) {//single move is ok?
+		} 
+		else if( ValidSingleMove(m,p)) {//single move is ok?
+			
 			return true;
-		} else if( ValidJump(m,p) ) {//jump move ok?
+		} 
+		else if( ValidJump(m,p) ) {//jump move ok?
+			
 			return true;
-		} else { //the move is valid
+		} 
+		else { //the move is valid
+			
 			return false;
 		}
 	}
 	
 	/**
+	 *	Checks to see if you've selected your Piece
+	 *	- Move m, represents the Move
+	 *	- Player p, represents the Player making the move
+	 *	- Returns True or False, depending on if you've selected your piece
+	 * 
 	 * @param m the move
 	 * @param p the player
 	 * @return true if the piece belongs to the player, false if it does not or if the start is EMPTY
 	 */
-	public boolean isPlayersPiece(Move m, Player p) {
-		if(p == Player.BLACK) {
-			return (boardspot[m.start] == Piece.KING_BLACK)||
-					( boardspot[m.start] == Piece.REG_BLACK );
-		} else {//RED
-			return (boardspot[m.start] == Piece.KING_RED) ||
-					( boardspot[m.start] == Piece.REG_RED );
+	public boolean isPlayersPiece(Move m, Player p)	{
+		
+		// If the Player is "BLACK"
+		if(p == Player.BLACK)	{
+			
+			// Is the Start of the Move on a Black King or Is the Start of the Move a Regular Black Piece?
+			return (boardspot[m.start] == Piece.KING_BLACK) || ( boardspot[m.start] == Piece.REG_BLACK );
+		} 
+		// Else, the Player is "RED"
+		else	{
+			
+			// Is the Start of the Move on a Red King or Is the Start of the Move a Regular Red Piece?
+			return (boardspot[m.start] == Piece.KING_RED) || ( boardspot[m.start] == Piece.REG_RED );
 		}
 	}
+	
 	/**
 	 * It is assumed that if there is a multi jump that
 	 * it is defined in an array in move at this point (STILL NEEDS TO BE DONE)
