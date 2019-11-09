@@ -227,7 +227,7 @@ public class CheckersGame	{
 	}
 	
 	/**
-	 * 	
+	 * 	Checks to see if the jump being attempted is valid.
 	 * 
 	 * It is assumed that if there is a multi jump that
 	 * it is defined in an array in move at this point (STILL NEEDS TO BE DONE)
@@ -235,63 +235,102 @@ public class CheckersGame	{
 	 * @param p
 	 * @return
 	 */
-	public boolean ValidJump(Move m, Player p) {
-		if(m.multiJump==null) {//check single jumps
-			if( boardspot[m.start] == Piece.KING_BLACK || boardspot[m.start] == Piece.KING_RED) {
-				//check what piece is removed
+	public boolean ValidJump(Move m, Player p)	{
+		
+		// Checks for Single Jump Only
+		if(m.multiJump == null)	{
+			
+			// If the Piece you're using is a King
+			if(boardspot[m.start] == Piece.KING_BLACK || boardspot[m.start] == Piece.KING_RED)	{
+				
+				
+				// Checks to see if the Move is valid
 				return BoardUtility.isValidJump(m);
-			} else {
-				if(Player.BLACK == p) {//black player
-					//non king black pieces can only go in increasing order
-					if(m.start<m.end) {
+			}
+			// Checks for Regular Pieces
+			else	{
+				
+				// If the Player is black
+				if(Player.BLACK == p)	{
+					
+					// Non-king Black Players can only go Increasing
+					if(m.start < m.end)	{
+						
 						return false;
-					} else {
+					} 
+					else	{
+						
+						// Checks to see if the Move is valid
 						return BoardUtility.isValidJump(m);
 					}
-				} else {//red player
-					//non king red pieces can only go in decreasing order
-					if(m.start>m.end) {
+				} 
+				// Else, the Player is red
+				else	{
+					
+					// Non-king Red Player can only go in decreasing 
+					if(m.start > m.end)	{
+						
 						return false;
-					} else {
+					} 
+					else	{
+						
+						// Checks to see if the Move is valid
 						return BoardUtility.isValidJump(m);
 					}
 				}
 			}
-		} else {//it is a multijump, search for move
-			//the jump is either a start and end or, if multi jump will show all spots hit
-			if(m.multiJump==null) {
+		} 
+		// Else it's a Multi-Jump 
+		else	{
+	
+			// The Jump is either a start and end, or if the Multi-Jump shows all spots hit
+			if (m.multiJump == null)	{
 				
-			} else {
+			} 
+			else	{
 				
-				//just go through the array
+				// tmp is the array of possible Multi-Jumps
 				int[] tmp = m.multiJump;
 				
+				// Start is your current space
 				int currentSpace = m.start;
 				int nextSpace;
-				for(int i = 1 ; i < tmp.length ; i++ ) {//start on the next index
-					nextSpace = tmp[i];//the next space
-					if(!(BoardUtility.isValidJump(currentSpace,nextSpace) && boardspot[nextSpace] == Piece.EMPTY )) {
+				
+				// Cyclying through the Multi-Jump Index 
+				for(int i = 1; i < tmp.length; i++)	{
+					
+					// The Next Space
+					nextSpace = tmp[i];
+					
+					// If it's a valid jump and the next space is empty
+					if(!(BoardUtility.isValidJump(currentSpace,nextSpace) && boardspot[nextSpace] == Piece.EMPTY ))	{
+						
 						return false;//if it is a validJump and the next spot is ok continue
 					}
+					
+					// Jumped Pieces
 					int jumpedPiece = getJumpedPiece(currentSpace,nextSpace);
+					
 					//relying on short-circuiting here, otherwise put a less than 0 check first
-					if( jumpedPiece >=0 && 
-						boardspot[jumpedPiece] != Piece.EMPTY) {//check to see we are actually jumping over an opponent piece
-						if( (Player.BLACK == p ) && 
-							(boardspot[jumpedPiece] != Piece.KING_RED || boardspot[jumpedPiece] != Piece.REG_RED )) {
+					if(jumpedPiece >= 0 && boardspot[jumpedPiece] != Piece.EMPTY)	{//check to see we are actually jumping over an opponent piece
+						
+						if((Player.BLACK == p ) && (boardspot[jumpedPiece] != Piece.KING_RED || boardspot[jumpedPiece] != Piece.REG_RED))	{
+							
 							//the jumped piece is not red
 							return false;
 						}
-						if( (Player.RED == p )  &&
-							(boardspot[jumpedPiece] != Piece.KING_RED || boardspot[jumpedPiece] != Piece.REG_RED )) {
+						if((Player.RED == p) && (boardspot[jumpedPiece] != Piece.KING_RED || boardspot[jumpedPiece] != Piece.REG_RED))	{
+							
 							//the jumped piece is not black
 							return false;
 						}
-					} 
+					}
+					
 					//the single jump is valid and will remove an opponents piece,
 					//move to next jump
 					currentSpace = nextSpace;
 				}
+				
 				//if here the set of jumps is valid
 				return true;
 			}
@@ -352,21 +391,105 @@ public class CheckersGame	{
 	 */
 	public Move[] AvailableMoves(Player p)	{
 		
+		// Two ArrayLists of Moves, one for Single-Jumps, and another for Multi-Jumps
 		ArrayList<Move> singleMoves = new ArrayList<Move>();
 		ArrayList<Move> jumpMoves = new ArrayList<Move>();
 		
+		// Pieces is the amount of Pieces we have
 		int[] pieces = PlayersPieces(p);
 		
+		// If the Player is "BLACK"
 		if(Player.BLACK == p)	{
 			
+			// Loop through all the Pieces
+			for(int index = 0; index < pieces.length; index++)	{
+				
+				// Put each piece into into the possible Moves and Jumps
+				int[] possibleMoves = BoardUtility.singleMoves[pieces[index]];
+				int[] possibleJumps = BoardUtility.singleJumps[pieces[index]];
+				
+				// If the Piece is a King
+				if(boardspot[pieces[index]] == Piece.KING_BLACK)	{
+					
+					// Loop through the possible moves
+					for(int i = 0; i < possibleMoves.length; i++)	{
+						
+						// If one of the possible moves is an empty piece
+						if(boardspot[possibleMoves[i]] == Piece.EMPTY)	{
+							
+							// Add a Move to "singleMoves" array, from the piece to the possible moves for that piece
+							singleMoves.add(new Move(pieces[index], possibleMoves[i]));
+						}
+					}
+					
+					// Loop through the possible Jumps
+					for(int i = 0; i < possibleJumps.length; i++)	{
+						
+						// The Jumped Piece is the Piece you're jumping
+						int jumpedPiece = getJumpedPiece(pieces[index], possibleJumps[i]);
+		
+						/*
+						 *  If the Possible Jump is Empty "AND" the Jumped Piece is greater than or equal to 0 "AND" 
+						 *  the Piece being jumped is an opponent piece (RED). 
+						 */
+						if(boardspot[possibleJumps[i]] == Piece.EMPTY && jumpedPiece >= 0 && (boardspot[jumpedPiece] == Piece.KING_RED || boardspot[jumpedPiece]  == Piece.REG_RED)) {
+							
+							// Add a Move to "jumpMoves" array, from the piece to the possible jumps for that piece
+							jumpMoves.add(new Move(pieces[index], possibleJumps[i],true));
+						}
+					}
+				}
+				// If the Piece is a Regular
+				else	{
+					
+					// Loop through the possible moves
+					for(int i = 0; i < possibleMoves.length; i++)	{
+						
+						// If one of the possible moves is in the correct direction "AND" the spot is empty
+						if(possibleMoves[i] > pieces[index] && boardspot[possibleMoves[i]] == Piece.EMPTY)	{
+							
+							// Add the Move to "singleMoves" array, from the piece to the possible moves for that piece
+							singleMoves.add(new Move(pieces[index], possibleMoves[i]));
+						}
+					}
+					
+					// Loop through the possible Jumps
+					for(int i = 0; i < possibleJumps.length; i++)	{
+						
+						// The Jumped Piece is the Piece you're jumping
+						int jumpedPiece = getJumpedPiece(pieces[index], possibleJumps[i]);
+						
+						/*
+						 * 	If the Possible Jump is Empty "AND" the Jumped Piece is greater than or equal to 0 "AND"
+						 * 	the Piece being jumped is an opponent piece (RED) "AND" the piece is going in the 
+						 *	right direction.
+						 */
+						if(boardspot[possibleJumps[i]] == Piece.EMPTY && jumpedPiece >= 0 && (boardspot[jumpedPiece] == Piece.KING_RED || boardspot[jumpedPiece] == Piece.REG_RED) && pieces[index] < possibleJumps[i])	{
+							
+							// Add a Move to "jumpMoves" array, from the piece to the possible jumps for that piece
+							jumpMoves.add(new Move(pieces[index], possibleJumps[i],true));
+						}
+					}
+				}
+			}
+		} 
+		// Else, the Player is "RED"
+		else	{
+			
+			/*
+			 *	The same exact code from above correlates to what's happening
+			 *	with the Red piece. Just compare this with the chunck above
+			 *	pertaining to the Black piece. 
+			 */
 			for(int index = 0; index < pieces.length; index++)	{
 				
 				int[] possibleMoves = BoardUtility.singleMoves[pieces[index]];
 				int[] possibleJumps = BoardUtility.singleJumps[pieces[index]];
 				
-				if(boardspot[pieces[index]] == Piece.KING_BLACK)	{//the piece is a king
+				// If the Piece is a King
+				if(boardspot[pieces[index]] == Piece.KING_RED)	{
 					
-					//check moves
+					// Loop through the Possible Moves
 					for(int i = 0; i < possibleMoves.length; i++)	{
 						
 						if(boardspot[possibleMoves[i]] == Piece.EMPTY)	{
@@ -375,123 +498,131 @@ public class CheckersGame	{
 						}
 					}
 					
-					//check jumps
+					// Loop through the possible Jumps
 					for(int i = 0; i < possibleJumps.length; i++)	{
 						
 						int jumpedPiece = getJumpedPiece(pieces[index], possibleJumps[i]);
 						
-// --------------------------------------------------------------------------------------------------------------------------------------------------------- CONTINUE HERE --------------------------------------------------------------------------------------						
-						if(boardspot[possibleJumps[i]] == Piece.EMPTY && //
-							jumpedPiece >=0 && //there is a piece to jump?
-							//opponents piece?
-							(boardspot[jumpedPiece] == Piece.KING_RED|| boardspot[jumpedPiece]  == Piece.REG_RED)) {
+						/*
+						 *  If the Possible Jump is Empty "AND" the Jumped Piece is greater than or equal to 0 "AND" 
+						 *  the Piece being jumped is an opponent piece (BLACK). 
+						 */
+						if(boardspot[possibleJumps[i]] == Piece.EMPTY && jumpedPiece >= 0 && (boardspot[jumpedPiece] == Piece.KING_BLACK || boardspot[jumpedPiece] == Piece.REG_BLACK))	{
+							
 							jumpMoves.add(new Move(pieces[index], possibleJumps[i],true));
 						}
 					}
-				} else {//the piece is a regular piece
-					//check moves
-					for(int i=0 ; i < possibleMoves.length ; i++ ) {
-						if(possibleMoves[i] > pieces[index] && boardspot[possibleMoves[i]] == Piece.EMPTY) {
+				} 
+				// Else, the Piece is Regular
+				else	{
+					
+					// Loop through possible moves
+					for(int i = 0; i < possibleMoves.length; i++)	{
+						
+						if(possibleMoves[i] < pieces[index] && boardspot[possibleMoves[i]] == Piece.EMPTY)	{
+							
 							singleMoves.add(new Move(pieces[index], possibleMoves[i]));
 						}
 					}
-					//checkjumps
-					for(int i=0 ; i < possibleJumps.length ; i++ ) {
+					
+					// Loop through possible Jumps
+					for(int i = 0; i < possibleJumps.length; i++)	{
+						
 						int jumpedPiece = getJumpedPiece(pieces[index], possibleJumps[i]);
-						if( boardspot[possibleJumps[i]] == Piece.EMPTY && //is the landing spot empty
-							jumpedPiece >=0  && //is there a piece to jump
-							//opponent piece?
-							(boardspot[jumpedPiece] == Piece.KING_RED|| boardspot[jumpedPiece]  == Piece.REG_RED) &&
-							pieces[index] < possibleJumps[i]) {//is the piece going in the correct direction
-							jumpMoves.add(new Move(pieces[index], possibleJumps[i],true));//then add it
-						}
-					}
-				}
-			}
-		} else {//RED PLAYER
-			for(int index = 0 ; index < pieces.length ; index++ ) {
-				int[] possibleMoves = BoardUtility.singleMoves[pieces[index]];
-				int[] possibleJumps = BoardUtility.singleJumps[pieces[index]];
-				if(boardspot[pieces[index]] == Piece.KING_RED) {//the piece is a king
-					//check moves
-					for(int i=0 ; i < possibleMoves.length ; i++ ) {
-						if(boardspot[possibleMoves[i]] == Piece.EMPTY) {
-							singleMoves.add(new Move(pieces[index], possibleMoves[i]));
-						}
-					}
-					//check jumps
-					for(int i = 0 ; i < possibleJumps.length ; i++ ) {
-						int jumpedPiece = getJumpedPiece(pieces[index], possibleJumps[i]);
-						if( boardspot[possibleJumps[i]] == Piece.EMPTY && //
-							jumpedPiece >=0 && //there is a piece to jump?
-							//opponents piece?
-							(boardspot[jumpedPiece] == Piece.KING_BLACK|| boardspot[jumpedPiece]  == Piece.REG_BLACK)) {
-							jumpMoves.add(new Move(pieces[index], possibleJumps[i],true));
-						}
-					}
-				} else {//the piece is a regular piece
-					//check moves
-					for(int i=0 ; i < possibleMoves.length ; i++ ) {
-						if(possibleMoves[i] < pieces[index] && boardspot[possibleMoves[i]] == Piece.EMPTY) {
-							singleMoves.add(new Move(pieces[index], possibleMoves[i]));
-						}
-					}
-					//checkjumps
-					for(int i=0 ; i < possibleJumps.length ; i++ ) {
-						int jumpedPiece = getJumpedPiece(pieces[index], possibleJumps[i]);
-						if( boardspot[possibleJumps[i]] == Piece.EMPTY && //is the landing spot empty
-							jumpedPiece >=0  && //is there a piece to jump
-							//opponent piece?
-							(boardspot[jumpedPiece] == Piece.KING_BLACK || boardspot[jumpedPiece]  == Piece.REG_BLACK) &&
-							pieces[index] > possibleJumps[i]) {//is the piece going in the correct direction
+						
+						/*
+						 * 	If the Possible Jump is Empty "AND" the Jumped Piece is greater than or equal to 0 "AND"
+						 * 	the Piece being jumped is an opponent piece (BLACK) "AND" the piece is going in the 
+						 *	right direction.
+						 */
+						if(boardspot[possibleJumps[i]] == Piece.EMPTY && jumpedPiece >= 0 && (boardspot[jumpedPiece] == Piece.KING_BLACK || boardspot[jumpedPiece]  == Piece.REG_BLACK) && pieces[index] > possibleJumps[i])	{
+							
+							// Add a Move to "jumpMoves" array, from the piece to the possible jumps for that piece
 							jumpMoves.add(new Move(pieces[index], possibleJumps[i],true));//then add it
 						}
 					}
 				}
 			}
 		}
-
+		
 		//get all moves available to player
 		//if there are jumps available filter down the moves to those
-		Move[] tmp ;// = new Move[moves.size()];
+		
+		// Create a array of Moves named "tmp"
+		Move[] tmp;
 
-		//filter out moves that are not apart of the last jump
-		if(inJump) {
-			for(int i = 0; i < jumpMoves.size() ; i++ ) {
-				if(jumpMoves.get(i).start!=lastJumpPiece) {
+		// Filtering out Moves that are not apart of the last jump
+		if(inJump)	{
+			
+			// Looping through the availble Jump Moves
+			for(int i = 0; i < jumpMoves.size(); i++)	{
+				
+				// If the Jump Move Start isn't equal to lastJumpPiece
+				if(jumpMoves.get(i).start != lastJumpPiece)	{
+					
+					// Then remove that Jump
 					jumpMoves.remove(i);
 				}
 			}
 		}
 		
-		if(jumpMoves.isEmpty()) {
+		// If Jump Moves are Empty
+		if(jumpMoves.isEmpty())	{
+			
 			tmp = new Move[singleMoves.size()];
 			singleMoves.toArray(tmp);
-		} else {
+		} 
+		else {
+			
 			tmp = new Move[jumpMoves.size()];
 			jumpMoves.toArray(tmp);
 		}
+		
+		// Returning an Array Moves availbe to the Player
 		return tmp;
 	}
 	
-	public int[] PlayersPieces(Player p) {
+	// Checks for all of the Players Pieces
+	public int[] PlayersPieces(Player p)	{
+		
+		// Array List to keep track of Pieces
 		ArrayList<Integer> piecesIndex = new ArrayList<Integer>();
-		for(int i = 0 ; i < boardspot.length ; i++ ) {
-			if( (boardspot[i]==Piece.KING_BLACK || boardspot[i]==Piece.REG_BLACK) &&
-					p==Player.BLACK
-					) {
+		
+		// Loop through every spot on the board
+		for(int i = 0; i < boardspot.length; i++)	{
+			
+			// If the spot had a Black King or Regular piece "AND" the Player is BLACK
+			if((boardspot[i] == Piece.KING_BLACK || boardspot[i] == Piece.REG_BLACK) && p == Player.BLACK)	{
+				
+				// Then add that Piece to the Index of Pieces
 				piecesIndex.add(i);
-			} else if((boardspot[i]==Piece.KING_RED || boardspot[i]==Piece.REG_RED ) &&
-						p==Player.RED) {
+			} 
+			// If the spot has a Red King or Regular piece "AND" the Player is RED
+			else if((boardspot[i] == Piece.KING_RED || boardspot[i] == Piece.REG_RED ) && p == Player.RED) {
+				
+				// Then add that Piece to the Index of Pieces
 				piecesIndex.add(i);
 			}
 		}
+		
+		/*
+		 * 	Is this part here redundant? Can't we just return the piecesIndex?
+		 * 	Or is it because we're using an ArrayList instead of an Array?
+		 */
+		
+		// New tmp Array of the same size as the Index of Pieces
 		int[] tmp = new int[piecesIndex.size()];
-		for(int i = 0 ; i < tmp.length ; i++ ) {
+		
+		for(int i = 0 ; i < tmp.length ; i++ )	{
+			
+			// The Temp is being filled with the Index of Pieces
 			tmp[i] = piecesIndex.get(i);
 		}
+		
+		// Return the Tmp
 		return tmp;
 	}
+	
 	/**
 	 * returns the index of the piece that will get jumped/taken,
 	 * invalid jumps will return a number less than 0
