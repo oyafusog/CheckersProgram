@@ -343,14 +343,15 @@ public class CheckersGame {
 		//get all moves available to player
 		//if there are jumps available filter down the moves to those
 		Move[] tmp ;// = new Move[moves.size()];
-
+		ArrayList<Move> filter=new ArrayList<Move>();
 		//filter out moves that are not apart of the last jump
 		if(inJump) {
 			for(int i = 0; i < jumpMoves.size() ; i++ ) {
-				if(jumpMoves.get(i).start!=lastJumpPiece) {
-					jumpMoves.remove(i);
+				if(jumpMoves.get(i).start==lastJumpPiece) {
+					filter.add(jumpMoves.get(i));
 				}
 			}
+			jumpMoves=filter;
 		}
 		
 		if(jumpMoves.isEmpty()) {
@@ -359,10 +360,12 @@ public class CheckersGame {
 		} else {
 			tmp = new Move[jumpMoves.size()];
 			jumpMoves.toArray(tmp);
+			
 		}
+
 		return tmp;
 	}
-	
+	//indexes of all the players pieces
 	public int[] PlayersPieces(Player p) {
 		ArrayList<Integer> piecesIndex = new ArrayList<Integer>();
 		for(int i = 0 ; i < boardspot.length ; i++ ) {
