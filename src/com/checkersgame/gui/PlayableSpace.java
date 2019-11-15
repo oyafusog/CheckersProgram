@@ -9,24 +9,20 @@ import java.awt.event.MouseListener;
 import javax.swing.JPanel;
 
 import com.checkersgame.Player;
-import com.checkersgame.CheckersGame;
 import com.checkersgame.Move;
 import com.checkersgame.Piece;
 
 public class PlayableSpace extends JPanel implements MouseListener {
 
-	
-	
 	/**
 	 *	Keep eclipse happy...
 	 */
 	private static final long serialVersionUID = -6042600935132354683L;
 	
-	public final int id;
-	CheckerBoard cb;
-	final Color orginalColor = Color.GRAY;
+	public final int id;//the space id
+	CheckerBoard cb;//reference to the CheckerBoard window
+	final Color orginalColor = Color.GRAY;//color of spaces
 	static int piecesize=35;
-	
 	
 	public PlayableSpace(int id,CheckerBoard cb) {
 		this.id = id;
@@ -69,8 +65,6 @@ public class PlayableSpace extends JPanel implements MouseListener {
 		} else {//red
 			moves = cb.game.AvailableMoves(Player.RED);
 		}
-//		Move[] black = cb.game.AvailableMoves(Player.BLACK);
-//		Move[] red = cb.game.AvailableMoves(Player.RED);
 		System.out.println("==> "+id+" PlayersTurn : "+cb.game.playersTurn);
 		if(cb.holdpiece && cb.heldpieceoriginalspace.id==id ) {
 			//reset holding a piece
@@ -78,9 +72,7 @@ public class PlayableSpace extends JPanel implements MouseListener {
 			cb.ResetHolding();
 		} else if(!cb.holdpiece && (cb.game.boardspot[id] == Piece.EMPTY) ) {
 			return;//do nothing
-		} else if(cb.holdpiece) {//try to place the piece
-			
-			
+		} else if(cb.holdpiece) {//try to place the piece		
 			if( Player.BLACK == cb.game.playersTurn &&
 				cb.game.pieceExistsInAvailableMovesEnd(cb.heldpieceoriginalspace.id, id, Player.BLACK, moves)
 				//cb.game.pieceExistsInAvailableMovesEnd(cb.heldpieceoriginalspace.id,id,Player.BLACK)	
@@ -196,8 +188,6 @@ public class PlayableSpace extends JPanel implements MouseListener {
 		} else {//red
 			moves = cb.game.AvailableMoves(Player.RED);
 		}
-//		Move[] black = cb.game.AvailableMoves(Player.BLACK);
-//		Move[] red = cb.game.AvailableMoves(Player.RED);
 		System.out.println("==> "+id+" PlayersTurn : "+cb.game.playersTurn);
 		if(cb.holdpiece && cb.heldpieceoriginalspace.id==id ) {
 			//reset holding a piece
@@ -313,28 +303,15 @@ public class PlayableSpace extends JPanel implements MouseListener {
 			}
 		}
 	}
-
 	
-	//dont really care about the rest of the mouse actions
+	//Not using the other mouse actions
+	@Override
+	public void mousePressed(MouseEvent e){}
+	@Override
+	public void mouseReleased(MouseEvent e){}
+	@Override
+	public void mouseEntered(MouseEvent e){}
+	@Override
+	public void mouseExited(MouseEvent e){}
 	
-	
-	@Override
-	public void mousePressed(MouseEvent e) {
-//		System.out.println(e.toString());		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-//		System.out.println(e.toString());	
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-//		System.out.println(e.toString());	
-	}
-	
-	@Override
-	public void mouseExited(MouseEvent e) {
-//		System.out.println(e.toString());
-	}
 }

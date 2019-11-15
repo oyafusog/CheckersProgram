@@ -5,7 +5,6 @@ import java.util.List;
 
 
 import com.agent.Agent;
-import com.agent.State;
 import com.checkersgame.CheckersGame;
 import com.checkersgame.Move;
 import com.checkersgame.Piece;
