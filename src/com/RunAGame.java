@@ -40,14 +40,14 @@ public class RunAGame {
 			player1.Init(Player.BLACK,theGame,theBoard);
 			player2 = new OtherBot(); //RED
 		}
-		
+		in.close();
 		boolean gameover = false;
 		while(!gameover ) {
 			
 			////////BLACK TURN
 			System.out.println("TURN BLACK ");theGame.playersTurn  = Player.BLACK ;//black takes turn, black always goes first
 			//take turn
-			CheckersGame.turnTaken=false;
+			theGame.turnTaken=false;
 			Move[] availableMovesBLACK = theGame.AvailableMoves(Player.BLACK);
 			if(availableMovesBLACK.length==0) {//if no moves available the player has lost
 				theGame.GameOver(Player.RED, " No more moves for player : BLACK");
@@ -58,7 +58,7 @@ public class RunAGame {
 			for(Move m : availableMovesBLACK) {
 				System.out.println(m);
 			}
-			while(!CheckersGame.turnTaken){
+			while(!theGame.turnTaken){
 				synchronized (theGame) {
 					player1.GetMove();
 				}
@@ -74,7 +74,7 @@ public class RunAGame {
 			
 			System.out.println("TURN RED ");theGame.playersTurn  = Player.RED ;//red's turn
 			//take turn
-			CheckersGame.turnTaken=false;
+			theGame.turnTaken=false;
 			Move[] availableMovesRED = theGame.AvailableMoves(Player.RED);
 			if(availableMovesRED.length==0) {
 				theGame.GameOver(Player.BLACK, " No more moves for player : RED");
@@ -85,7 +85,7 @@ public class RunAGame {
 			for(Move m : availableMovesRED) {
 				System.out.println(m);
 			}
-			while(!CheckersGame.turnTaken) {
+			while(!theGame.turnTaken) {
 				synchronized (theGame) {
 					player2.GetMove();
 				}

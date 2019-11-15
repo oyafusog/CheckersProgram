@@ -82,7 +82,7 @@ public class PlayableSpace extends JPanel implements MouseListener {
 			
 			
 			if( Player.BLACK == cb.game.playersTurn &&
-				CheckersGame.pieceExistsInAvailableMovesEnd(cb.heldpieceoriginalspace.id, id, Player.BLACK, moves)
+				cb.game.pieceExistsInAvailableMovesEnd(cb.heldpieceoriginalspace.id, id, Player.BLACK, moves)
 				//cb.game.pieceExistsInAvailableMovesEnd(cb.heldpieceoriginalspace.id,id,Player.BLACK)	
 				) {
 				//remove piece
@@ -111,7 +111,7 @@ public class PlayableSpace extends JPanel implements MouseListener {
 				//check for more jumps
 
 			} else if( Player.RED == cb.game.playersTurn &&
-					   CheckersGame.pieceExistsInAvailableMovesEnd(cb.heldpieceoriginalspace.id, id, Player.RED, moves)
+						cb.game.pieceExistsInAvailableMovesEnd(cb.heldpieceoriginalspace.id, id, Player.RED, moves)
 					   //cb.game.pieceExistsInAvailableMovesEnd(cb.heldpieceoriginalspace.id,id,Player.RED)	
 					   ){//RED
 				//remove piece
@@ -142,7 +142,7 @@ public class PlayableSpace extends JPanel implements MouseListener {
 			//cb.PlacePiece(id);
 			if(moves==null) {
 //				System.out.println("MOVES NULL");
-				CheckersGame.turnTaken=true;
+				cb.game.turnTaken=true;
 				cb.game.inJump = false;//reset stuff
 				cb.game.lastJumpPiece=-1;//reset stuff
 			} else {
@@ -154,13 +154,13 @@ public class PlayableSpace extends JPanel implements MouseListener {
 				}
 				if(!jumpMovesLeft) {
 //					System.out.println("!jumpMovesLeft");
-					CheckersGame.turnTaken=true;
+					cb.game.turnTaken=true;
 					cb.game.inJump = false;//reset stuff
 					cb.game.lastJumpPiece=-1;//reset stuff
 				}
 			}
 			if(pieceKingedThisTurn) {
-				CheckersGame.turnTaken=true;
+				cb.game.turnTaken=true;
 				cb.game.inJump = false;//reset stuff
 				cb.game.lastJumpPiece=-1;//reset stuff
 			}
@@ -169,14 +169,14 @@ public class PlayableSpace extends JPanel implements MouseListener {
 					( cb.game.boardspot[id] == Piece.KING_BLACK || 
 					  cb.game.boardspot[id] == Piece.REG_BLACK   ) &&
 					  cb.game.playersTurn == Player.BLACK &&
-					  CheckersGame.pieceExistsInAvailableMovesStart(id,Player.BLACK,moves)
+					  cb.game.pieceExistsInAvailableMovesStart(id,Player.BLACK,moves)
 				) 
 					||
 				(
 					( cb.game.boardspot[id] == Piece.KING_RED || 
 					  cb.game.boardspot[id] == Piece.REG_RED   ) &&
 					  cb.game.playersTurn == Player.RED &&
-					  CheckersGame.pieceExistsInAvailableMovesStart(id,Player.RED,moves)
+					  cb.game.pieceExistsInAvailableMovesStart(id,Player.RED,moves)
 				)	
 			) {
 				this.setBackground(Color.GREEN);	//show the piece trying to be picked up
@@ -209,7 +209,7 @@ public class PlayableSpace extends JPanel implements MouseListener {
 			
 			
 			if( Player.BLACK == cb.game.playersTurn &&
-				CheckersGame.pieceExistsInAvailableMovesEnd(cb.heldpieceoriginalspace.id, id, Player.BLACK, moves)
+				cb.game.pieceExistsInAvailableMovesEnd(cb.heldpieceoriginalspace.id, id, Player.BLACK, moves)
 				//cb.game.pieceExistsInAvailableMovesEnd(cb.heldpieceoriginalspace.id,id,Player.BLACK)	
 				) {
 				//remove piece
@@ -238,7 +238,7 @@ public class PlayableSpace extends JPanel implements MouseListener {
 				//check for more jumps
 
 			} else if( Player.RED == cb.game.playersTurn &&
-					   CheckersGame.pieceExistsInAvailableMovesEnd(cb.heldpieceoriginalspace.id, id, Player.RED, moves)
+					   cb.game.pieceExistsInAvailableMovesEnd(cb.heldpieceoriginalspace.id, id, Player.RED, moves)
 					   //cb.game.pieceExistsInAvailableMovesEnd(cb.heldpieceoriginalspace.id,id,Player.RED)	
 					   ){//RED
 				//remove piece
@@ -269,7 +269,7 @@ public class PlayableSpace extends JPanel implements MouseListener {
 			//cb.PlacePiece(id);
 			if(moves==null) {
 //				System.out.println("MOVES NULL");
-				CheckersGame.turnTaken=true;
+				cb.game.turnTaken=true;
 				cb.game.inJump = false;//reset stuff
 				cb.game.lastJumpPiece=-1;//reset stuff
 			} else {
@@ -281,13 +281,13 @@ public class PlayableSpace extends JPanel implements MouseListener {
 				}
 				if(!jumpMovesLeft) {
 //					System.out.println("!jumpMovesLeft");
-					CheckersGame.turnTaken=true;
+					cb.game.turnTaken=true;
 					cb.game.inJump = false;//reset stuff
 					cb.game.lastJumpPiece=-1;//reset stuff
 				}
 			}
 			if(pieceKingedThisTurn) {
-				CheckersGame.turnTaken=true;
+				cb.game.turnTaken=true;
 				cb.game.inJump = false;//reset stuff
 				cb.game.lastJumpPiece=-1;//reset stuff
 			}
@@ -296,14 +296,14 @@ public class PlayableSpace extends JPanel implements MouseListener {
 					( cb.game.boardspot[id] == Piece.KING_BLACK || 
 					  cb.game.boardspot[id] == Piece.REG_BLACK   ) &&
 					  cb.game.playersTurn == Player.BLACK &&
-					  CheckersGame.pieceExistsInAvailableMovesStart(id,Player.BLACK,moves)
+					  cb.game.pieceExistsInAvailableMovesStart(id,Player.BLACK,moves)
 				) 
 					||
 				(
 					( cb.game.boardspot[id] == Piece.KING_RED || 
 					  cb.game.boardspot[id] == Piece.REG_RED   ) &&
 					  cb.game.playersTurn == Player.RED &&
-					  CheckersGame.pieceExistsInAvailableMovesStart(id,Player.RED,moves)
+					  cb.game.pieceExistsInAvailableMovesStart(id,Player.RED,moves)
 				)	
 			) {
 				this.setBackground(Color.GREEN);	//show the piece trying to be picked up

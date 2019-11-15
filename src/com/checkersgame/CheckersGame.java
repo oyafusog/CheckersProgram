@@ -8,22 +8,34 @@ public class CheckersGame {
 	
 	public Player playersTurn;
 	public Piece[] boardspot;
-	public static boolean turnTaken=false;
+	public  boolean turnTaken=false;
 	
 	public boolean inJump=false;
 	public int lastJumpPiece=-1;
 	
 	public CheckersGame() {
+		
 		boardspot = new Piece[] {
 				Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK,
-				Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, 
-				Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, 
-				Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,
-				Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,
+				Piece.REG_BLACK, Piece.EMPTY, Piece.REG_BLACK, Piece.REG_BLACK, 
+				Piece.REG_BLACK, Piece.REG_RED, Piece.REG_BLACK, Piece.REG_BLACK, 
+				Piece.REG_RED,     Piece.REG_RED,     Piece.EMPTY,     Piece.REG_RED,
+				Piece.EMPTY,     Piece.REG_RED,     Piece.REG_RED,     Piece.EMPTY,
+				Piece.EMPTY,   Piece.EMPTY,   Piece.EMPTY,   Piece.EMPTY,
 				Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
-				Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
-				Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
+				Piece.EMPTY,   Piece.REG_RED,   Piece.KING_BLACK,   Piece.REG_RED,
 		};
+		
+//		boardspot = new Piece[] {
+//				Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK,
+//				Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, 
+//				Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, 
+//				Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,
+//				Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,
+//				Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
+//				Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
+//				Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
+//		};
 		
 //king jumps
 //		boardspot = new Piece[] {
@@ -432,7 +444,7 @@ public class CheckersGame {
 		}
 	}
 	
-	public static boolean pieceExistsInAvailableMovesStart(int start,Player p,Move[] m) {
+	public boolean pieceExistsInAvailableMovesStart(int start,Player p,Move[] m) {
 		boolean flag=false;
 		//Move[] m = AvailableMoves(p);
 		for(int i = 0 ; i < m.length ; i++) {
@@ -443,7 +455,7 @@ public class CheckersGame {
 		return flag;
 	}
 	
-	public static boolean pieceExistsInAvailableMovesEnd(int start, int end,Player p,Move[] m) {
+	public boolean pieceExistsInAvailableMovesEnd(int start, int end,Player p,Move[] m) {
 		boolean flag=false;
 		//Move[] m = AvailableMoves(p);
 		for(int i = 0 ; i < m.length ; i++) {
