@@ -137,7 +137,7 @@ public class GameUtility {
 		ArrayList<Move> singleMoves = new ArrayList<Move>();
 		ArrayList<Move> jumpMoves = new ArrayList<Move>();
 		
-		int[] pieces = StateUtility.PlayersPieces(p,state);
+		int[] pieces = PlayersPieces(p,state);
 		if(Player.BLACK == p ) {
 			//go through player's checkers
 			for(int index = 0 ; index < pieces.length ; index++ ) {
