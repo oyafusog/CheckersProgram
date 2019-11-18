@@ -56,7 +56,7 @@ public class RunAGame {
 			}
 			//hints
 			for(Move m : availableMovesBLACK) {
-				System.out.println(m);
+				System.out.println("HINT ->" + m);
 			}
 			while(!theGame.turnTaken){
 				synchronized (theGame) {
@@ -83,7 +83,7 @@ public class RunAGame {
 			}
 			//hints
 			for(Move m : availableMovesRED) {
-				System.out.println(m);
+				System.out.println("HINT ->" + m);
 			}
 			while(!theGame.turnTaken) {
 				synchronized (theGame) {

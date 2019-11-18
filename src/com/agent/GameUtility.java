@@ -27,9 +27,32 @@ public class GameUtility {
 		return newState;
 	}
 	
+	/**
+	 * Simplifies the list of maps into a map
+	 * @param p
+	 * @param state
+	 * @return
+	 */
+	public static HashMap<Move,Piece[]> ACTIONS(Player p, Piece[] state){
+		//System.out.println("ACTIONS");
+		ArrayList<HashMap<Move,Piece[]>> outcomes = GetCompletedStates(p,state);
+		HashMap<Move,Piece[]> map = new HashMap<Move,Piece[]>();
+		
+		for(HashMap<Move,Piece[]> m : outcomes) {
+			for(Move move : m.keySet()) {
+				if(move.isJump) {
+					move.start = move.multiJump[0];
+				}
+				map.put(move, m.get(move));
+			}
+		}
+		return map;
+	}
+	
 	//will return the state after making move m
 	//or returns the set of moves if it is a jump, and states of the jump
 	public static HashMap<Move,Piece[]> CheckersPieceMove(Move m, Player p,Piece[] state) {
+		//System.out.println("\t\tCheckersPieceMove");
 		HashMap<Move,Piece[]> outcomes = new HashMap<Move,Piece[]>();
 		if(!m.isJump) {
 			Piece[] newState = MovePiece(m,state);
@@ -50,13 +73,12 @@ public class GameUtility {
 			Piece[] newState = MovePiece(temp,nextStates.removeFirst());//simulate the move
 			
 			Move[] newerMoves = AvailableStarts(p, newState);//new moves from new state			
-			System.out.println("On move --> "+ temp);
 			int size=0;
 			
 			for(int i =0;i<newerMoves.length; i++) {
 				if(temp.end==newerMoves[i].start && newerMoves[i].isJump) {
 					size++;
-					System.out.println(newerMoves[i]+"<--");
+					//System.out.println(newerMoves[i]+"<--");
 				}
 			}
 			if(size==0) {//this move will end here
@@ -80,10 +102,9 @@ public class GameUtility {
 		}
 		//lets reformat the move
 		for(Move tmp : outcomes.keySet()) {
-			System.out.println("START-----> " + tmp);
-			for(Move sss: tmp.pastMove) {
-				System.out.println("TEMP -----> " + sss);
-			}
+			//for(Move sss: tmp.pastMove) {
+			//	System.out.println("TEMP -----> " + sss);
+			//}
 //			System.out.println(tmp+" contains ");
 			ArrayList<Integer> multimove = new ArrayList<Integer>();
 			
@@ -115,13 +136,14 @@ public class GameUtility {
 	}
 	
 	public static ArrayList<HashMap<Move,Piece[]>> GetCompletedStates(Player p, Piece[] state) {
+		//System.out.println("\tGetCompletedStates");
 		ArrayList<HashMap<Move,Piece[]>> outcomes = new ArrayList<HashMap<Move,Piece[]>>();
 		Move[] starts = AvailableStarts(p,state);//Start of moves
 		for(int i = 0 ; i < starts.length ; i++ ) {
 			HashMap<Move,Piece[]> stuff = CheckersPieceMove(starts[i],p,state);
-			for(Move m : stuff.keySet()) {
-				System.out.println(m);
-			}
+//			for(Move m : stuff.keySet()) {
+//				System.out.println(m);
+//			}
 			outcomes.add(stuff);
 		}
 		return outcomes;
