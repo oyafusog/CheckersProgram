@@ -15,27 +15,39 @@ public class CheckersGame {
 	
 	public CheckersGame() {
 		
-		boardspot = new Piece[] {
-				Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK,
-				Piece.REG_BLACK, Piece.EMPTY, Piece.REG_BLACK, Piece.REG_BLACK, 
-				Piece.REG_BLACK, Piece.REG_RED, Piece.REG_BLACK, Piece.REG_BLACK, 
-				Piece.REG_RED,     Piece.REG_RED,     Piece.EMPTY,     Piece.REG_RED,
-				Piece.EMPTY,     Piece.REG_RED,     Piece.REG_RED,     Piece.EMPTY,
-				Piece.EMPTY,   Piece.EMPTY,   Piece.EMPTY,   Piece.EMPTY,
-				Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
-				Piece.EMPTY,   Piece.REG_RED,   Piece.KING_BLACK,   Piece.REG_RED,
-		};
+//		boardspot = new Piece[] {
+//		Piece.REG_BLACK, Piece.EMPTY, Piece.EMPTY, Piece.REG_BLACK,
+//		Piece.REG_BLACK, Piece.EMPTY, Piece.EMPTY, Piece.REG_BLACK, 
+//		Piece.REG_BLACK, Piece.EMPTY, Piece.REG_BLACK, Piece.EMPTY, 
+//		Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,     Piece.REG_BLACK,
+//		Piece.EMPTY,     Piece.REG_RED,     Piece.EMPTY,     Piece.EMPTY,
+//		Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.EMPTY,
+//		Piece.REG_RED,   Piece.EMPTY,   Piece.REG_BLACK,   Piece.REG_BLACK,
+//		Piece.REG_RED,   Piece.EMPTY,   Piece.EMPTY,   Piece.EMPTY,
+//};
+		
 		
 //		boardspot = new Piece[] {
 //				Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK,
-//				Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, 
-//				Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, 
-//				Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,
-//				Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,
+//				Piece.REG_BLACK, Piece.EMPTY, Piece.REG_BLACK, Piece.REG_BLACK, 
+//				Piece.REG_BLACK, Piece.REG_RED, Piece.REG_BLACK, Piece.REG_BLACK, 
+//				Piece.REG_RED,     Piece.REG_RED,     Piece.EMPTY,     Piece.REG_RED,
+//				Piece.EMPTY,     Piece.REG_RED,     Piece.REG_RED,     Piece.EMPTY,
+//				Piece.EMPTY,   Piece.EMPTY,   Piece.EMPTY,   Piece.EMPTY,
 //				Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
-//				Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
-//				Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
+//				Piece.EMPTY,   Piece.REG_RED,   Piece.KING_BLACK,   Piece.REG_RED,
 //		};
+		//REGULAR START
+		boardspot = new Piece[] {
+				Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK,
+				Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, 
+				Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, Piece.REG_BLACK, 
+				Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,
+				Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,     Piece.EMPTY,
+				Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
+				Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
+				Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,   Piece.REG_RED,
+		};
 		
 //king jumps
 //		boardspot = new Piece[] {

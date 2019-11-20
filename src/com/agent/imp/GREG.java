@@ -55,15 +55,37 @@ public class GREG implements Agent {
 	 * Will set execute_this
 	 */
 	public void EvaluateEndStatesAndSelect() {
-		ArrayList<Move> moves = new ArrayList<Move>();
-		for(HashMap<Move,Piece[]> map : futureMoveStates) {
-			for(Move m : map.keySet()) {
-				moves.add(m);
-			}
-		}
-		System.out.println("DEBUG --> "+moves.size());
-		//random move for now
-		execute_this = moves.get((int) ((Math.random()*(moves.size()))));
+		
+		
+//		ArrayList<Move> moves = new ArrayList<Move>();
+//		for(HashMap<Move,Piece[]> map : futureMoveStates) {
+//			for(Move m : map.keySet()) {
+//				moves.add(m);
+//			}
+//		}
+//		System.out.println("DEBUG --> "+moves.size());
+		
+//		HashMap<Move,Piece[]> movestates = GameUtility.ACTIONS(p, game.boardspot);
+//		for(Move m : movestates.keySet()) {
+//			System.out.println("EVAL --> "+m);
+//			execute_this =m;
+//		}
+		
+		
+//		//random move for now
+//		execute_this = moves.get((int) ((Math.random()*(moves.size()))));
+//		System.out.println("CHOSE "+execute_this);
+		
+		int ply=4;
+		MiniMax minimax = new MiniMax(
+							game.boardspot,
+							ply,
+							p,
+							(p==Player.BLACK?Player.RED:Player.BLACK)
+							);
+		minimax.SetEvaluator(new Evaluator_1());
+		//Use minimax
+		execute_this = minimax.MINIMAX_DECISION();
 		System.out.println("CHOSE "+execute_this);
 	}
 	@Override

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import com.agent.Evaluator;
 import com.agent.GameUtility;
 import com.checkersgame.Move;
 import com.checkersgame.Piece;
@@ -14,6 +15,9 @@ import com.checkersgame.Player;
  * Node of minimax tree
  */
 class Node {
+	
+	public Player p;
+	
 	public Node parent;//null if at the top of a tree
 	//Child nodes represent a move and the state that move results in
 	public ArrayList<Node> children;
@@ -21,7 +25,8 @@ class Node {
 	Move id;//the move
 	Piece[] state;//the state id puts the board state into
 	
-	public Node(Node parent,Move m , Piece[] state) {
+	public Node(Player p, Node parent,Move m , Piece[] state) {
+		this.p=p;
 		this.id = m;
 		//make sure we duplicate the state, so not to break everything	
 		this.state=state.clone();
@@ -44,7 +49,7 @@ class Node {
 		if(parent==null) {
 			return "root";
 		}else {
-			return "[ Parent = "+parent.id +", \nlevel ="+level+"\nMove = "+id+" ]";
+			return "[ Player"+p+", Parent = "+parent.id +", \nlevel ="+level+"\nMove = "+id+" ]";
 		}
 	}	
 	
@@ -63,15 +68,109 @@ public class MiniMax {
 	int depth;
 	ArrayList<Node> test;
 	Node ROOT;
+	Evaluator eval;
+	
 	public MiniMax(Piece[] state,int PLY,Player MAX, Player MIN){
 		assert MAX!=MIN:"Players should not be the same in minimax";
 		this.MAX=MAX;
 		this.MIN=MIN;
-		Node tree = new Node(null,null,state);//create top node
+		//create top node
+		Node tree = new Node(null,//no players here,if needed this would be MAX
+				null,
+				null,
+				state);
 		//Create the tree of next states
 		Construct(tree,PLY,MAX);//should always start with MAX
 		ROOT=tree;
 	}
+	
+	public Move MINIMAX_DECISION() {
+		int v = Integer.MIN_VALUE;
+		Node bestutility=null;
+		for(Node n : ROOT.children) {
+			int utilityofn = MIN_VALUE(n);
+			if(v<utilityofn) {
+				v=utilityofn;
+				bestutility=n;
+			}
+		}
+		return bestutility.id;
+	}
+	
+	public int MAX_VALUE(Node n) {
+		if(TERMINAL_TEST(n)) {
+			return eval.Utility(n.state, MAX);
+		} else {
+			//set as low as possible
+			int v = Integer.MIN_VALUE;
+			
+			//go through the children and see what has the maximizing value
+			for(Node c : n.children) {
+				int utilityofc = MIN_VALUE(c);
+				if(v<utilityofc) {
+					v=utilityofc;
+				}
+			}
+			return v;
+		}
+	}
+	
+	public int MIN_VALUE(Node n) {
+		if(TERMINAL_TEST(n)) {
+			return eval.Utility(n.state, MAX);
+		} else {
+			//set value as high as possible
+			int v = Integer.MAX_VALUE;
+			
+			//go through
+			for(Node c : n.children) {
+				int utilityofc = MAX_VALUE(c);
+				if(v>utilityofc) {
+					v = utilityofc;
+				}
+			}
+			return v;
+		}
+	}
+	
+	/**
+	 * return true if we have devled far enough
+	 */
+	public boolean TERMINAL_TEST(Node n) {
+		return !(n.level<_PLY);
+	}
+	
+//	/**
+//	 * 
+//	 * @return the move that, depending on the ply, will maximize MAX's utility
+//	 *         or minimize MIN's utility
+//	 */
+//	public Move Decision(int ply) {
+//		//steps
+//		//determine how we will go
+//		//go through the tree and collect nodes at the correct depth
+//		
+//		ArrayList<Node> nodesAtDepth = new ArrayList<Node>();
+//		LinkedList<Node> frontier = new LinkedList<Node>();
+//		frontier.add(ROOT);
+//		while(!frontier.isEmpty()) {
+//			Node lookingat = frontier.pop();
+//			if(lookingat.level < ply && !lookingat.children.isEmpty()) {
+//				for(Node c : lookingat.children) {
+//					//System.out.println("Adding to frontier"+c);
+//					frontier.add(c);
+//				}
+//			} else {//it is at the correct ply
+//				nodesAtDepth.add(lookingat);
+//			}
+//			
+//		}
+//		for(Node e : nodesAtDepth) {
+//			System.out.println("\n"+e);
+//		}
+//		
+//		return null;
+//	}
 	
 	public void Construct(Node root, int ply,Player p) {
 		//create a queue
@@ -104,10 +203,17 @@ public class MiniMax {
 		//a state given the player p's turn
 		HashMap<Move,Piece[]> map = GameUtility.ACTIONS(p, parent.state);
 		for(Move m : map.keySet()) {
-			Node c = new Node(parent,m,map.get(m));//new node
+			//new node
+			Node c = new Node(p,
+					parent,
+					m,map.get(m));//new node
 			c.parent=parent;//set the parent
 			parent.children.add(c);//add the parents children into the arraylist
 		}
+	}
+	
+	public void SetEvaluator(Evaluator e) {
+		eval=e;
 	}
 	
 //BOARD SETUP
@@ -124,10 +230,15 @@ public class MiniMax {
 	
 	//Test the minimax construction of the tree
 	public static void main(String ... args) {
-		MiniMax algo = new MiniMax(board,2,Player.BLACK,Player.RED);
-		System.out.println("------------------------------------------");
-		PrintNodes(algo.ROOT,0);//DEBUGGING
+		int PLY = 2;
 		
+		MiniMax algo = new MiniMax(board,PLY,Player.BLACK,Player.RED);
+		algo.SetEvaluator(new Evaluator_1());
+		System.out.println("------------------------------------------");
+		//PrintNodes(algo.ROOT,0);//DEBUGGING
+		//algo.Decision(PLY);
+		Move k = algo.MINIMAX_DECISION();
+		System.out.println(k);
 		System.out.println("\nDone");
 	}
 	
