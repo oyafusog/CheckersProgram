@@ -1,25 +1,39 @@
-package com.agent.imp;
+package com.agent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.agent.Agent;
-import com.agent.GameUtility;
 import com.checkersgame.CheckersGame;
 import com.checkersgame.Move;
 import com.checkersgame.Piece;
 import com.checkersgame.Player;
 import com.checkersgame.gui.CheckerBoard;
 
-public class GREG implements Agent {
-
+public abstract class GenericAgent implements Agent {
+	
 	public Player p;
 	public CheckerBoard board;
 	public CheckersGame game;
 	ArrayList<HashMap<Move,Piece[]>> futureMoveStates;
 	boolean turn =false;//flag
-	Move execute_this;
+	protected Move execute_this;
 	int movecounter=0;
+	
+	public abstract void EvaluateEndStatesAndSelect();
+	/*{
+		int ply=2;
+		MiniMax minimax = new MiniMax(
+							game.boardspot,
+							ply,
+							p,
+							(p==Player.BLACK?Player.RED:Player.BLACK)
+							);
+		minimax.SetEvaluator(new Evaluator_1());
+		//Use minimax
+		execute_this = minimax.MINIMAX_DECISION();
+		System.out.println("CHOSE "+execute_this);
+	}*/
+	
 	
 	@Override
 	public void Init(Player p, CheckersGame game, CheckerBoard board) {
@@ -27,7 +41,6 @@ public class GREG implements Agent {
 		this.game=game;
 		this.board=board;
 	}
-
 	@Override
 	public void GetMove() {
 		if(!turn) {
@@ -51,43 +64,7 @@ public class GREG implements Agent {
 			}
 		}
 	}
-	/**
-	 * Will set execute_this
-	 */
-	public void EvaluateEndStatesAndSelect() {
-		
-		
-//		ArrayList<Move> moves = new ArrayList<Move>();
-//		for(HashMap<Move,Piece[]> map : futureMoveStates) {
-//			for(Move m : map.keySet()) {
-//				moves.add(m);
-//			}
-//		}
-//		System.out.println("DEBUG --> "+moves.size());
-		
-//		HashMap<Move,Piece[]> movestates = GameUtility.ACTIONS(p, game.boardspot);
-//		for(Move m : movestates.keySet()) {
-//			System.out.println("EVAL --> "+m);
-//			execute_this =m;
-//		}
-		
-		
-//		//random move for now
-//		execute_this = moves.get((int) ((Math.random()*(moves.size()))));
-//		System.out.println("CHOSE "+execute_this);
-		
-		int ply=2;
-		MiniMax minimax = new MiniMax(
-							game.boardspot,
-							ply,
-							p,
-							(p==Player.BLACK?Player.RED:Player.BLACK)
-							);
-		minimax.SetEvaluator(new Evaluator_1());
-		//Use minimax
-		execute_this = minimax.MINIMAX_DECISION();
-		System.out.println("CHOSE "+execute_this);
-	}
+	
 	@Override
 	public void ClearCollectMoves() {
 		// TODO Auto-generated method stub
@@ -99,5 +76,4 @@ public class GREG implements Agent {
 		// TODO Auto-generated method stub
 		
 	}
-
 }

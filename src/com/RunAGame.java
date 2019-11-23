@@ -2,6 +2,7 @@ package com;
 import java.util.Scanner;
 
 import com.agent.Agent;
+import com.agent.imp.AGENT_TESTBOT;
 import com.agent.imp.GREG;
 import com.agent.imp.OtherBot;
 import com.agent.imp.TestAgent;
@@ -32,11 +33,13 @@ public class RunAGame {
 		if(_player > 0) {//the player is the black player
 			player1 = new OtherBot();//BLACK
 			//player2 = new TestAgent(); //RED
-			player2 = new GREG();
+			//player2 = new GREG();
+			player2 = new AGENT_TESTBOT(); 			
 			player2.Init(Player.RED, theGame,theBoard);
 		} else {//other wise red
 			//player1 = new TestAgent(); //BLACK
-			player1 = new GREG();
+			//player1 = new GREG();		
+			player1 = new AGENT_TESTBOT(); 
 			player1.Init(Player.BLACK,theGame,theBoard);
 			player2 = new OtherBot(); //RED
 		}
