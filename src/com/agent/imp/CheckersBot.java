@@ -11,7 +11,7 @@ import com.checkersgame.Piece;
 import com.checkersgame.Player;
 import com.checkersgame.gui.CheckerBoard;
 
-public class GREG implements Agent {
+public class CheckersBot implements Agent {
 
 	public Player p;
 	public CheckerBoard board;
@@ -55,26 +55,6 @@ public class GREG implements Agent {
 	 * Will set execute_this
 	 */
 	public void EvaluateEndStatesAndSelect() {
-		
-		
-//		ArrayList<Move> moves = new ArrayList<Move>();
-//		for(HashMap<Move,Piece[]> map : futureMoveStates) {
-//			for(Move m : map.keySet()) {
-//				moves.add(m);
-//			}
-//		}
-//		System.out.println("DEBUG --> "+moves.size());
-		
-//		HashMap<Move,Piece[]> movestates = GameUtility.ACTIONS(p, game.boardspot);
-//		for(Move m : movestates.keySet()) {
-//			System.out.println("EVAL --> "+m);
-//			execute_this =m;
-//		}
-		
-		
-//		//random move for now
-//		execute_this = moves.get((int) ((Math.random()*(moves.size()))));
-//		System.out.println("CHOSE "+execute_this);
 		
 		int ply=2;
 		MiniMax minimax = new MiniMax(

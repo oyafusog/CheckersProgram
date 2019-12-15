@@ -9,34 +9,12 @@ public class Evaluator_1 implements Evaluator {
 
 	@Override
 	public int Utility(Piece[] state, Player p) {
-		//System.out.println("------------------------------------------");
-		//System.out.println("Utility Function : NUM(MINE)- NUM(OPPONENT)");
-		                                    //ternary operator
+
 		Player otherPlayer = ( Player.BLACK==p ? Player.RED : Player.BLACK);//figure out which color the opposing player is
-		
 		int myNum =	NumberOfPieces(p,state);//number of my pieces
 		int opponentsNum = NumberOfPieces(otherPlayer,state);//number of opponents pieces
-		
 		int utility = myNum - opponentsNum;
-		//simplest evaluator, how many more pieces will I have than my opponent in this state
-		//NOTE: this does not account for moves that will place pieces in "danger", most scores will be
-		//0 1 or -1
 		
-		//Perhaps a better evaluator will take into account the number of pieces it has to begin with,
-		//vs how many pieces it will have in the max ply state :/
-		
-		//Another Idea would be to only evaluate based on the test agent, though. need to adjust weights
-		//for a king being stuck in a corner.
-		
-		//Not sure if this matters, but a Minimax algo usually has a zero sum,
-		//any points lost or gained is directly influencing, exactly, the enemy/opponent's
-		//points gained or loss. Or something like that. 
-		
-		
-		//System.out.println("I am : "+p);
-		//System.out.println("My Opponenet : "+otherPlayer);
-		//System.out.println("The Move : "+node.id);
-		//System.out.println("Other Player : "+otherPlayer+"\nMe : "+p+"'s utility is "+utility);
 		return utility;
 	}
 

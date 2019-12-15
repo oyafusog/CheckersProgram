@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 import com.agent.Agent;
 import com.agent.imp.AGENT_TESTBOT;
-import com.agent.imp.GREG;
+import com.agent.imp.CheckersBot;
 import com.agent.imp.OtherBot;
 import com.agent.imp.TestAgent;
 import com.checkersgame.*;
